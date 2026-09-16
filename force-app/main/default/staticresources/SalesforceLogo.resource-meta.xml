@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StaticResource xmlns="http://soap.sforce.com/2006/04/metadata">
+    <cacheControl>Public</cacheControl>
+    <contentType>image/png</contentType>
+    <description>Salesforce cloud logo, served from the site's own domain so the Experience Cloud CSP does not block it. Trademark of Salesforce, Inc. — deliberately not committed to the public repo.</description>
+</StaticResource>

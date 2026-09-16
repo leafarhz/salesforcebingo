@@ -56,6 +56,18 @@ public without sharing class BingoService {
         @AuraEnabled public ScoreDTO score;
     }
 
+    public class EventDTO {
+        @AuraEnabled public String eventName;
+        @AuraEnabled public String eventMeta;
+        @AuraEnabled public String gameTitle;
+        @AuraEnabled public String tagline;
+        @AuraEnabled public String sessionName;
+        @AuraEnabled public String sessionDetails;
+        @AuraEnabled public String welcomeMessage;
+        @AuraEnabled public String privacyNotice;
+        @AuraEnabled public String logoUrl;
+    }
+
     public class PlayerRefDTO {
         @AuraEnabled public String playerId;      // opaque handle; the email never leaves the server
         @AuraEnabled public String displayName;
@@ -161,6 +173,49 @@ public without sharing class BingoService {
         );
         insert mark;
         return buildCard(key, mark);
+    }
+
+    /**
+     * Per-event branding and copy, so the same app can run a different conference,
+     * meetup or user group by editing a Bingo_Event__mdt record rather than
+     * redeploying. Cacheable — it is static config, not game state.
+     *
+     * Falls back to sensible defaults when no record is marked active, so a fresh
+     * org still renders something coherent.
+     */
+    @AuraEnabled(cacheable=true)
+    public static EventDTO getEventConfig() {
+        EventDTO dto = new EventDTO();
+        List<Bingo_Event__mdt> configs = new List<Bingo_Event__mdt>();
+        try {
+            configs = [
+                SELECT Event_Name__c, Event_Meta__c, Game_Title__c, Tagline__c,
+                       Session_Name__c, Session_Details__c, Welcome_Message__c,
+                       Privacy_Notice__c, Logo_Url__c
+                FROM Bingo_Event__mdt WHERE Is_Active__c = true LIMIT 1
+            ];
+        } catch (Exception e) {
+            // Custom metadata has its own access rules and a guest context can refuse
+            // the query outright. Branding is never worth a broken page, so fall through
+            // to defaults rather than letting this bubble up.
+            configs = new List<Bingo_Event__mdt>();
+        }
+        if (configs.isEmpty()) {
+            dto.gameTitle      = 'Networking Bingo';
+            dto.welcomeMessage = 'Meet people, fill your card, win prizes.';
+            return dto;
+        }
+        Bingo_Event__mdt cfg = configs[0];
+        dto.eventName      = cfg.Event_Name__c;
+        dto.eventMeta      = cfg.Event_Meta__c;
+        dto.gameTitle      = cfg.Game_Title__c;
+        dto.tagline        = cfg.Tagline__c;
+        dto.sessionName    = cfg.Session_Name__c;
+        dto.sessionDetails = cfg.Session_Details__c;
+        dto.welcomeMessage = cfg.Welcome_Message__c;
+        dto.privacyNotice  = cfg.Privacy_Notice__c;
+        dto.logoUrl        = cfg.Logo_Url__c;
+        return dto;
     }
 
     // ------------------------------------------------------------ Player

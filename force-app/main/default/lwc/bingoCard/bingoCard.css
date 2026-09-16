@@ -116,3 +116,24 @@
     .masthead__title { font-size: 3rem; }
     .letter { font-size: 1.3rem; padding: 0.4rem 0; }
 }
+
+.session {
+    background: #032d60;
+    color: #fff;
+    border-radius: 0.5rem;
+    padding: 0.7rem 0.9rem;
+    margin-bottom: 1.1rem;
+    text-align: center;
+}
+.session__name { margin: 0; font-weight: 800; font-size: 0.95rem; }
+.session__details {
+    margin: 0.2rem 0 0; font-size: 0.7rem; color: #9fd6ff;
+    letter-spacing: 0.02em; line-height: 1.35;
+}
+
+.masthead__logo {
+    display: block;
+    width: 4.5rem;
+    height: auto;
+    margin: 0 auto 0.5rem;
+}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Per-event branding and copy for Networking Bingo. Lets the same app be reused for another conference, meetup or user group by editing a record instead of redeploying code.</description>
+    <label>Bingo Event</label>
+    <pluralLabel>Bingo Events</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

@@ -15,3 +15,8 @@ npm-debug.log*
 
 # Scratch output from one-off destructive deploys
 destructive/destructiveChanges.xml
+
+# Salesforce trademark — deployed to the org, deliberately not redistributed here.
+# Supply your own via Bingo_Event__mdt.Logo_Url__c (a static resource path such as
+# /sfsites/c/resource/YourLogo avoids the Experience Cloud CSP entirely).
+force-app/main/default/staticresources/SalesforceLogo.png

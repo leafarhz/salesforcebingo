@@ -24,13 +24,7 @@
                        autocomplete="name" placeholder="How should we call you?"
                        value={displayName} oninput={handleNameInput} />
 
-                <p class="entry__notice">
-                    Your email is stored for the duration of Dreamforce 2026 — it's how we
-                    find your card when you come back — and deleted after the raffle. It's
-                    never shown to anyone else. Your <em>display name</em> is public: it
-                    appears on the leaderboard and to people naming you, so pick whatever
-                    you're happy for others to see.
-                </p>
+                <p class="entry__notice">{event.privacyNotice}</p>
 
                 <template lwc:if={errorMessage}>
                     <p class="bingo__error" role="alert">{errorMessage}</p>

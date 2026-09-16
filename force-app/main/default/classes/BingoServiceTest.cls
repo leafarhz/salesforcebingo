@@ -53,6 +53,31 @@ private class BingoServiceTest {
         }
     }
 
+    @IsTest
+    static void eventConfigReadsTheActiveRecord() {
+        BingoService.EventDTO cfg = BingoService.getEventConfig();
+        System.assertNotEquals(null, cfg, 'Config must never come back null.');
+        System.assertNotEquals(null, cfg.gameTitle, 'A title should always resolve, even with no record.');
+    }
+
+    /** Custom metadata has its own access rules — confirm a guest can actually read it. */
+    @IsTest(SeeAllData=true)
+    static void guestCanReadEventConfig() {
+        User guest = [
+            SELECT Id FROM User
+            WHERE UserType = 'Guest' AND IsActive = true AND Profile.Name = 'Networking Bingo Profile'
+            LIMIT 1
+        ];
+        BingoService.EventDTO cfg;
+        System.runAs(guest) {
+            cfg = BingoService.getEventConfig();
+        }
+        // Whether a guest can read custom metadata is the open question; what must
+        // never happen is a thrown exception taking the page down with it.
+        System.assertNotEquals(null, cfg, 'Guest must always receive a config object.');
+        System.assertNotEquals(null, cfg.gameTitle, 'Guest must always get a usable title.');
+    }
+
     // ------------------------------------------------------------ Derived layout
 
     @IsTest

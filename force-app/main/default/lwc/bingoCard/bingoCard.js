@@ -3,6 +3,7 @@ import startSession from '@salesforce/apex/BingoService.startSession';
 import markSquare from '@salesforce/apex/BingoService.markSquare';
 import unmarkSquare from '@salesforce/apex/BingoService.unmarkSquare';
 import searchPlayers from '@salesforce/apex/BingoService.searchPlayers';
+import getEventConfig from '@salesforce/apex/BingoService.getEventConfig';
 
 const STORAGE_KEY = 'df26-bingo-email';
 
@@ -40,15 +41,27 @@ export default class BingoCard extends LightningElement {
     searchResults = [];
     searching = false;
 
+    /** Branding and copy from Bingo_Event__mdt — never hard-coded to one conference. */
+    @track event = {};
+
     // ------------------------------------------------------------ Lifecycle
 
     connectedCallback() {
+        this.loadEvent();
         // Returning on the same device skips re-typing the email. The card itself
         // is derived server-side from that email, so this is only a convenience.
         const saved = this.safeGetStoredEmail();
         if (saved) {
             this.email = saved;
             this.resume();
+        }
+    }
+
+    async loadEvent() {
+        try {
+            this.event = (await getEventConfig()) ?? {};
+        } catch (e) {
+            this.event = {};   // branding is never worth blocking the game
         }
     }
 
@@ -122,6 +135,14 @@ export default class BingoCard extends LightningElement {
     }
 
     // Rendered above the grid, matching the printed card's column headers.
+    get hasLogo() {
+        return !!this.event?.logoUrl;
+    }
+
+    get hasSession() {
+        return !!this.event?.sessionName;
+    }
+
     get bingoLetters() {
         return ['B', 'I', 'N', 'G', 'O'].map((letter, index) => ({
             letter,
