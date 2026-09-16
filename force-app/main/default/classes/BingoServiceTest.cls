@@ -246,18 +246,84 @@ private class BingoServiceTest {
         } catch (AuraHandledException e) { System.assert(true); }
     }
 
+    @IsTest
+    static void aPersonCanOnlyClaimOneSquare() {
+        seedPrompts(30);
+        Id ada = register('ada@example.com', 'Ada');
+        BingoService.CardDTO card = BingoService.startSession('greedy@example.com', 'Greedy', true);
+
+        BingoService.markSquare('greedy@example.com', 0, 0, ada);
+        try {
+            BingoService.markSquare('greedy@example.com', 0, 1, ada);
+            System.assert(false, 'The same person must not fill a second square.');
+        } catch (AuraHandledException e) {
+            System.assert(true);
+        }
+        System.assertEquals(1,
+            BingoService.startSession('greedy@example.com', 'Greedy', true).score.squares,
+            'Only the first square should have stuck.');
+    }
+
+    @IsTest
+    static void reassigningTheSameSquareToTheSamePersonIsAllowed() {
+        seedPrompts(30);
+        Id ada = register('ada@example.com', 'Ada');
+        BingoService.startSession('redo@example.com', 'Redo', true);
+
+        BingoService.markSquare('redo@example.com', 0, 0, ada);
+        BingoService.CardDTO again = BingoService.markSquare('redo@example.com', 0, 0, ada);
+        System.assertEquals(1, again.score.squares, 'Re-marking the same square must not be blocked.');
+    }
+
+    @IsTest
+    static void clearingASquareFreesThePersonUpAgain() {
+        seedPrompts(30);
+        Id ada = register('ada@example.com', 'Ada');
+        BingoService.startSession('free2@example.com', 'Free', true);
+
+        BingoService.markSquare('free2@example.com', 0, 0, ada);
+        BingoService.unmarkSquare('free2@example.com', 0, 0);
+        BingoService.CardDTO moved = BingoService.markSquare('free2@example.com', 1, 1, ada);
+        System.assertEquals(1, moved.score.squares, 'After clearing, the person should be reusable.');
+    }
+
+    @IsTest
+    static void searchHidesPeopleAlreadyClaimed() {
+        seedPrompts(30);
+        Id ada = register('ada@example.com', 'Ada Nova');
+        register('alan@example.com', 'Alan Nova');
+        BingoService.startSession('picker@example.com', 'Picker', true);
+
+        System.assertEquals(2, BingoService.searchPlayers('Nova', 'picker@example.com').size(),
+            'Both should be findable before anyone is claimed.');
+
+        BingoService.markSquare('picker@example.com', 0, 0, ada);
+
+        List<BingoService.PlayerRefDTO> after = BingoService.searchPlayers('Nova', 'picker@example.com');
+        System.assertEquals(1, after.size(), 'Ada should disappear once claimed.');
+        System.assertEquals('Alan Nova', after[0].displayName);
+    }
+
     // ------------------------------------------------------------ Scoring
 
     @IsTest
     static void scoreCountsSquaresLinesAndHelpers() {
         seedPrompts(30);
-        Id ada = register('ada@example.com', 'Ada');
+        // Four squares need four different people: one person counts once per card.
+        List<Id> friends = new List<Id>{
+            register('f1@example.com', 'Friend One'),
+            register('f2@example.com', 'Friend Two'),
+            register('f3@example.com', 'Friend Three'),
+            register('f4@example.com', 'Friend Four')
+        };
         BingoService.startSession('scorer@example.com', 'Scorer', true);
 
         BingoService.CardDTO state;
+        Integer i = 0;
         for (Integer c = 0; c < 5; c++) {
             if (c == 2) { continue; }                       // free space
-            state = BingoService.markSquare('scorer@example.com', 2, c, ada);
+            state = BingoService.markSquare('scorer@example.com', 2, c, friends[i]);
+            i++;
         }
 
         // 4 squares, one completed row, no blackout, nobody has met the scorer.
@@ -334,22 +400,29 @@ private class BingoServiceTest {
     @IsTest
     static void leaderboardRanksByTotalScore() {
         seedPrompts(30);
-        Id ada = register('ada@example.com', 'Ada');
+        List<Id> friends = new List<Id>{
+            register('f1@example.com', 'Friend One'),
+            register('f2@example.com', 'Friend Two'),
+            register('f3@example.com', 'Friend Three'),
+            register('f4@example.com', 'Friend Four')
+        };
         BingoService.startSession('low@example.com', 'Low', true);
         BingoService.startSession('high@example.com', 'High', true);
 
-        BingoService.markSquare('low@example.com', 0, 0, ada);
+        BingoService.markSquare('low@example.com', 0, 0, friends[0]);
+        Integer i = 0;
         for (Integer c = 0; c < 5; c++) {
             if (c == 2) { continue; }
-            BingoService.markSquare('high@example.com', 2, c, ada);
+            BingoService.markSquare('high@example.com', 2, c, friends[i]);
+            i++;
         }
 
         List<BingoService.LeaderRowDTO> board = BingoService.getLeaderboard(10);
-        System.assert(board.size() >= 3, 'Ada, High and Low should all appear.');
+        System.assert(board.size() >= 3, 'Friends, High and Low should all appear.');
         System.assertEquals(1, board[0].rank);
 
         // High: 4 squares + 1 completed row = 4 + 5 = 9.
-        // Ada: met 5 times = 5. Low: 1 square = 1.
+        // Friend One: met twice = 2. Low: 1 square = 1.
         System.assertEquals('High', board[0].displayName, 'Most points should rank first.');
         System.assertEquals(9, board[0].total);
         System.assert(board[0].total >= board[1].total, 'Board must be sorted descending.');

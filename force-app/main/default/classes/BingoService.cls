@@ -109,9 +109,14 @@ public without sharing class BingoService {
         String pattern = '%' + term.trim() + '%';
         String me   = String.isBlank(excludeEmail) ? '' : excludeEmail.trim().toLowerCase();
 
+        // Each person counts once per card, so anyone already claimed is filtered
+        // out here rather than left to fail on submit.
+        Set<String> used = peopleAlreadyUsed(me);
+        used.add(me);
+
         for (Bingo_Player__c p : [
             SELECT Id, Display_Name__c FROM Bingo_Player__c
-            WHERE Display_Name__c LIKE :pattern AND Email__c != :me
+            WHERE Display_Name__c LIKE :pattern AND Email__c NOT IN :used
             ORDER BY Display_Name__c
             LIMIT 10
         ]) {
@@ -142,6 +147,22 @@ public without sharing class BingoService {
         }
         if (met[0].Email__c == key) {
             throw new AuraHandledException('You can\'t mark a square by meeting yourself.');
+        }
+
+        // One person, one square. Without this a player can name the same friend on
+        // all 24 squares and win having met nobody.
+        String targetCell = rowIndex + '-' + colIndex;
+        Map<String, Bingo_Mark__c> current = effectiveMarks(key);   // query once, not per cell
+        for (String cell : current.keySet()) {
+            if (cell == targetCell) {
+                continue;                       // re-assigning the same square is fine
+            }
+            Bingo_Mark__c existing = current.get(cell);
+            if (existing.Cleared__c != true && existing.Met_Player_Email__c == met[0].Email__c) {
+                throw new AuraHandledException(
+                    'You already claimed a square with ' + met[0].Display_Name__c +
+                    '. Each person counts once — go and meet someone new.');
+            }
         }
 
         Bingo_Mark__c mark = new Bingo_Mark__c(
@@ -327,15 +348,7 @@ public without sharing class BingoService {
     private static CardDTO buildCard(String key, Bingo_Mark__c pending) {
         List<String> layout = layoutFor(key);
 
-        // Latest row per cell wins; a Cleared__c row un-marks it.
-        Map<String, Bingo_Mark__c> latest = new Map<String, Bingo_Mark__c>();
-        for (Bingo_Mark__c m : [
-            SELECT Row__c, Col__c, Met_Person_Name__c, Cleared__c
-            FROM Bingo_Mark__c WHERE Email__c = :key
-            ORDER BY CreatedDate ASC, Id ASC
-        ]) {
-            latest.put(Integer.valueOf(m.Row__c) + '-' + Integer.valueOf(m.Col__c), m);
-        }
+        Map<String, Bingo_Mark__c> latest = effectiveMarks(key);
         if (pending != null) {
             latest.put(Integer.valueOf(pending.Row__c) + '-' + Integer.valueOf(pending.Col__c), pending);
         }
@@ -538,6 +551,33 @@ public without sharing class BingoService {
             return (a.displayName == null ? '' : a.displayName)
                 .compareTo(b.displayName == null ? '' : b.displayName);
         }
+    }
+
+    /** Latest row per cell. A Cleared__c row supersedes the mark beneath it. */
+    private static Map<String, Bingo_Mark__c> effectiveMarks(String key) {
+        Map<String, Bingo_Mark__c> latest = new Map<String, Bingo_Mark__c>();
+        for (Bingo_Mark__c m : [
+            SELECT Row__c, Col__c, Met_Person_Name__c, Met_Player_Email__c, Cleared__c
+            FROM Bingo_Mark__c WHERE Email__c = :key
+            ORDER BY CreatedDate ASC, Id ASC
+        ]) {
+            latest.put(Integer.valueOf(m.Row__c) + '-' + Integer.valueOf(m.Col__c), m);
+        }
+        return latest;
+    }
+
+    /** Everyone this player has already claimed a square with. */
+    private static Set<String> peopleAlreadyUsed(String key) {
+        Set<String> used = new Set<String>();
+        if (String.isBlank(key)) {
+            return used;
+        }
+        for (Bingo_Mark__c m : effectiveMarks(key).values()) {
+            if (m.Cleared__c != true && String.isNotBlank(m.Met_Player_Email__c)) {
+                used.add(m.Met_Player_Email__c);
+            }
+        }
+        return used;
     }
 
     /** Five rows, five columns, two diagonals. The free space counts as marked. */
