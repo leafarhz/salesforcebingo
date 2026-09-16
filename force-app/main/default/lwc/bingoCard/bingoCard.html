@@ -3,7 +3,12 @@
         <!-- ---------------------------------------------- Entry -->
         <template lwc:if={showEntry}>
             <div class="entry">
-                <h1 class="entry__title">Dreamforce Networking Bingo</h1>
+                <div class="masthead">
+                    <p class="masthead__event">DREAMFORCE <span>2026</span></p>
+                    <p class="masthead__meta">SAN FRANCISCO · SEPT 15–17, 2026 · MOSCONE CENTER</p>
+                    <h1 class="masthead__title">Networking Bingo</h1>
+                    <p class="masthead__tag">PEOPLE · IDEAS · COMMUNITY · A BRIGHTER TOMORROW</p>
+                </div>
                 <p class="entry__lede">
                     Meet people, fill squares, win prizes. Your email is your key —
                     come back on any device and your card is waiting.
@@ -59,6 +64,12 @@
             <template lwc:if={errorMessage}>
                 <p class="bingo__error" role="alert">{errorMessage}</p>
             </template>
+
+            <div class="grid grid--letters" aria-hidden="true">
+                <template for:each={bingoLetters} for:item="head">
+                    <div key={head.key} class="letter">{head.letter}</div>
+                </template>
+            </div>
 
             <div class="grid">
                 <template for:each={squares} for:item="square">

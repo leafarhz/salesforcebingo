@@ -13,6 +13,8 @@ export default class BingoSquare extends LightningElement {
 
     get cssClass() {
         const classes = ['tile'];
+        // Each column carries its own pale tint, echoing the printed B-I-N-G-O card.
+        classes.push(`tile--col${this.square?.colIndex ?? 0}`);
         if (this.square?.isFreeSpace) {
             classes.push('tile--free');
         } else if (this.square?.isMarked) {

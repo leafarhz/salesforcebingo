@@ -1,71 +1,84 @@
+/* Palette lifted from the printed Dreamforce 2026 card. */
 .tile {
-    /* Square cells regardless of viewport, so the 5x5 never distorts. */
     aspect-ratio: 1 / 1;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.25rem;
-    padding: 0.35rem;
+    gap: 0.2rem;
+    padding: 0.35rem 0.3rem;
 
-    border: 1px solid #c9c9c9;
-    border-radius: 0.5rem;
+    border: 1px solid #dbe4ef;
+    border-radius: 0.4rem;
     background: #ffffff;
-    color: #181818;
+    color: #032d60;
     font-family: inherit;
-    font-size: 0.62rem;
-    line-height: 1.15;
+    font-size: 0.6rem;
+    line-height: 1.2;
     text-align: center;
     cursor: pointer;
 
-    /* Stops a long unbroken prompt from blowing out the column. */
     overflow: hidden;
     overflow-wrap: anywhere;
-    transition: background-color 0.12s ease, transform 0.08s ease;
+    transition: background-color 0.12s ease, transform 0.08s ease, box-shadow 0.12s ease;
 }
 
-.tile:active {
-    transform: scale(0.96);
-}
+/* Per-column tints — B, I, N, G, O */
+.tile--col0 { background: #eef4ff; }
+.tile--col1 { background: #eef7ee; }
+.tile--col2 { background: #fff7ec; }
+.tile--col3 { background: #f6f1fb; }
+.tile--col4 { background: #fdf0f0; }
 
-.tile:focus-visible {
-    outline: 2px solid #0176d3;
-    outline-offset: 2px;
-}
+.tile:active { transform: scale(0.96); }
+.tile:focus-visible { outline: 2px solid #0176d3; outline-offset: 2px; }
 
 .tile--marked {
-    background: #d7f4e3;
-    border-color: #2e844a;
-    color: #0a5228;
+    background: #032d60;
+    border-color: #032d60;
+    color: #ffffff;
     font-weight: 600;
+    box-shadow: inset 0 0 0 2px #1b96ff;
 }
 
 .tile--free {
     background: #0176d3;
     border-color: #0176d3;
     color: #ffffff;
+    gap: 0.15rem;
+}
+
+.tile--pending { opacity: 0.55; }
+
+.tile__text { display: block; }
+
+/* Echoes the blank write-in line on the paper card. */
+.tile__rule {
+    width: 72%;
+    height: 1px;
+    background: #b9c6d8;
+    margin-top: 0.15rem;
+}
+
+.tile__met {
+    font-size: 0.55rem;
     font-weight: 700;
+    color: #9fd6ff;
+    border-top: 1px solid rgba(255, 255, 255, 0.35);
+    padding-top: 0.15rem;
+    margin-top: 0.1rem;
+    max-width: 100%;
 }
 
-/* Optimistic state: shown as marked, not yet confirmed by the server. */
-.tile--pending {
-    opacity: 0.6;
-}
-
-.tile__text {
-    display: block;
-}
-
-.tile__check,
-.tile__star {
-    font-size: 0.85rem;
-    line-height: 1;
-}
+.tile__cloud { width: 1.5rem; height: auto; }
+.tile__free-title { font-weight: 800; letter-spacing: 0.02em; font-size: 0.6rem; }
+.tile__free-sub { font-size: 0.5rem; opacity: 0.9; line-height: 1.1; }
 
 @media (min-width: 30rem) {
-    .tile {
-        font-size: 0.72rem;
-        padding: 0.5rem;
-    }
+    .tile { font-size: 0.7rem; padding: 0.5rem; }
+    .tile__met { font-size: 0.62rem; }
+    .tile__free-title { font-size: 0.72rem; }
+    .tile__free-sub { font-size: 0.58rem; }
+    .tile__cloud { width: 1.9rem; }
 }

@@ -6,13 +6,22 @@
         aria-pressed={square.isMarked}
         onclick={handleClick}
     >
-        <span class="tile__text">{shortText}</span>
-
-        <template lwc:if={showCheck}>
-            <span class="tile__check" aria-hidden="true">✓</span>
-        </template>
         <template lwc:if={square.isFreeSpace}>
-            <span class="tile__star" aria-hidden="true">★</span>
+            <svg class="tile__cloud" viewBox="0 0 64 40" aria-hidden="true" focusable="false">
+                <path d="M51 38H16A14 14 0 0 1 16 10a17 17 0 0 1 32 4 11 11 0 0 1 3 24Z" fill="currentColor"/>
+            </svg>
+            <span class="tile__free-title">FREE SPACE</span>
+            <span class="tile__free-sub">Make Connections Here!</span>
+        </template>
+
+        <template lwc:else>
+            <span class="tile__text">{shortText}</span>
+            <template lwc:if={showCheck}>
+                <span class="tile__met">{square.metPersonName}</span>
+            </template>
+            <template lwc:else>
+                <span class="tile__rule" aria-hidden="true"></span>
+            </template>
         </template>
     </button>
 </template>

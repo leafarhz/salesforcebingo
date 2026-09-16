@@ -121,6 +121,14 @@ export default class BingoCard extends LightningElement {
         return parts.join(' · ');
     }
 
+    // Rendered above the grid, matching the printed card's column headers.
+    get bingoLetters() {
+        return ['B', 'I', 'N', 'G', 'O'].map((letter, index) => ({
+            letter,
+            key: `hdr-${index}`
+        }));
+    }
+
     get showLeaderboardLink() {
         return !!this.leaderboardUrl;
     }
