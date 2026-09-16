@@ -4,15 +4,22 @@
         <template lwc:if={showEntry}>
             <div class="entry">
                 <div class="masthead">
-                    <p class="masthead__event">DREAMFORCE <span>2026</span></p>
-                    <p class="masthead__meta">SAN FRANCISCO · SEPT 15–17, 2026 · MOSCONE CENTER</p>
-                    <h1 class="masthead__title">Networking Bingo</h1>
-                    <p class="masthead__tag">PEOPLE · IDEAS · COMMUNITY · A BRIGHTER TOMORROW</p>
+                    <template lwc:if={hasLogo}>
+                        <img class="masthead__logo" src={event.logoUrl} alt="" />
+                    </template>
+                    <p class="masthead__event">{event.eventName}</p>
+                    <p class="masthead__meta">{event.eventMeta}</p>
+                    <h1 class="masthead__title">{event.gameTitle}</h1>
+                    <p class="masthead__tag">{event.tagline}</p>
                 </div>
-                <p class="entry__lede">
-                    Meet people, fill squares, win prizes. Your email is your key —
-                    come back on any device and your card is waiting.
-                </p>
+
+                <template lwc:if={hasSession}>
+                    <div class="session">
+                        <p class="session__name">{event.sessionName}</p>
+                        <p class="session__details">{event.sessionDetails}</p>
+                    </div>
+                </template>
+                <p class="entry__lede">{event.welcomeMessage}</p>
 
                 <label class="entry__label" for="email">Email</label>
                 <input id="email" class="entry__input" type="email" inputmode="email"
