@@ -88,6 +88,7 @@ public without sharing class BingoService {
         @AuraEnabled public Integer helped;
         @AuraEnabled public Integer total;
         @AuraEnabled public Boolean blackout;
+        @AuraEnabled public Datetime reachedAt;   // when this score was reached — the tie-break
     }
 
     // ------------------------------------------------------------ Entry points
@@ -481,11 +482,16 @@ public without sharing class BingoService {
 
         // email -> cell -> effective (latest) mark
         Map<String, Map<String, Bingo_Mark__c>> byPlayer = new Map<String, Map<String, Bingo_Mark__c>>();
+        Map<String, Datetime> reachedAt = new Map<String, Datetime>();
         for (Bingo_Mark__c m : [
-            SELECT Email__c, Row__c, Col__c, Cleared__c, Met_Player_Email__c
+            SELECT Email__c, Row__c, Col__c, Cleared__c, Met_Player_Email__c, CreatedDate
             FROM Bingo_Mark__c
             ORDER BY CreatedDate ASC, Id ASC
         ]) {
+            // Ordered ascending, so the last scoring mark seen is the most recent one.
+            if (m.Cleared__c != true) {
+                reachedAt.put(m.Email__c, m.CreatedDate);
+            }
             if (!byPlayer.containsKey(m.Email__c)) {
                 byPlayer.put(m.Email__c, new Map<String, Bingo_Mark__c>());
             }
@@ -532,6 +538,7 @@ public without sharing class BingoService {
             row.helped      = helped.containsKey(playerEmail) ? helped.get(playerEmail) : 0;
             row.blackout    = (squares == PROMPTS_PER_CARD);
             row.total       = scoreOf(row.squares, row.lines, row.blackout, row.helped);
+            row.reachedAt   = reachedAt.get(playerEmail);
             rows.add(row);
         }
 
@@ -544,12 +551,26 @@ public without sharing class BingoService {
         return top;
     }
 
+    /**
+     * Highest score wins; ties go to whoever got there first.
+     *
+     * Prizes hang off this order, so the tie-break has to be defensible out loud.
+     * Sorting equal scores alphabetically would hand a plushie to whoever happened
+     * to be called Ana rather than Zoe.
+     */
     private class ByScoreDesc implements Comparator<LeaderRowDTO> {
         public Integer compare(LeaderRowDTO a, LeaderRowDTO b) {
             if (a.total != b.total)     { return b.total - a.total; }
             if (a.squares != b.squares) { return b.squares - a.squares; }
-            return (a.displayName == null ? '' : a.displayName)
-                .compareTo(b.displayName == null ? '' : b.displayName);
+
+            // Earliest timestamp first. A player with no marks at all (helper points
+            // only) sorts last among equals rather than jumping the queue.
+            if (a.reachedAt == null && b.reachedAt == null) { return 0; }
+            if (a.reachedAt == null) { return 1; }
+            if (b.reachedAt == null) { return -1; }
+            if (a.reachedAt < b.reachedAt) { return -1; }
+            if (a.reachedAt > b.reachedAt) { return 1; }
+            return 0;
         }
     }
 

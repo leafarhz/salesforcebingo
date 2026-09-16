@@ -447,6 +447,40 @@ private class BingoServiceTest {
         System.assert(found, 'A player who only helped others must still be ranked.');
     }
 
+    /** Prizes depend on this order, so an equal score must not be broken by name. */
+    @IsTest
+    static void tiedScoresRankByWhoGotThereFirst() {
+        seedPrompts(30);
+        Id friendA = register('fa@example.com', 'Friend A');
+        Id friendB = register('fb@example.com', 'Friend B');
+
+        // "Zoe" plays first, "Ana" second. Alphabetically Ana would win; she must not.
+        BingoService.startSession('zoe@example.com', 'Zoe', true);
+        BingoService.markSquare('zoe@example.com', 0, 0, friendA);
+
+        BingoService.startSession('ana@example.com', 'Ana', true);
+        BingoService.markSquare('ana@example.com', 0, 0, friendB);
+
+        // Force a measurable gap so the timestamps cannot collide.
+        Bingo_Mark__c anaMark = [
+            SELECT Id FROM Bingo_Mark__c WHERE Email__c = 'ana@example.com' LIMIT 1
+        ];
+        Test.setCreatedDate(anaMark.Id, System.now().addMinutes(5));
+
+        List<BingoService.LeaderRowDTO> board = BingoService.getLeaderboard(25);
+        BingoService.LeaderRowDTO zoe;
+        BingoService.LeaderRowDTO ana;
+        for (BingoService.LeaderRowDTO row : board) {
+            if (row.displayName == 'Zoe') { zoe = row; }
+            if (row.displayName == 'Ana') { ana = row; }
+        }
+        System.assertNotEquals(null, zoe);
+        System.assertNotEquals(null, ana);
+        System.assertEquals(zoe.total, ana.total, 'Both should be on the same score.');
+        System.assert(zoe.rank < ana.rank,
+            'Equal scores must rank by who got there first, not alphabetically.');
+    }
+
     // ------------------------------------------------------------ Validation
 
     @IsTest
