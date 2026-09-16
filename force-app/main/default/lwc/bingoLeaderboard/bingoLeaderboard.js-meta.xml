@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>67.0</apiVersion>
+    <isExposed>true</isExposed>
+    <masterLabel>Networking Bingo Leaderboard</masterLabel>
+    <description>Ranked standings. Scores are derived from the marks log on every load.</description>
+    <targets>
+        <target>lightningCommunity__Page</target>
+        <target>lightningCommunity__Default</target>
+    </targets>
+    <targetConfigs>
+        <targetConfig targets="lightningCommunity__Default">
+            <property name="backUrl" type="String" label="Back-to-card page URL"
+                      description="e.g. /bingo — leave blank to hide the link." />
+            <property name="maxRows" type="Integer" default="25" label="Rows to show" />
+            <property name="refreshSeconds" type="Integer" default="0"
+                      label="Auto-refresh (seconds, 0 = off)"
+                      description="Set to e.g. 30 for an unattended booth screen." />
+        </targetConfig>
+    </targetConfigs>
+</LightningComponentBundle>

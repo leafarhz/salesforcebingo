@@ -1,0 +1,742 @@
+[
+ [
+  [
+   "Has stayed up way too late doing Trailhead",
+   "Is wearing Salesforce or Trailblazer swag",
+   "Can recommend a great food spot near Moscone",
+   "Has organized a Salesforce community event",
+   "Has a story about how the Salesforce community changed their career"
+  ],
+  [
+   "Has built with Lightning Web Components (LWC)",
+   "Is passionate about education, nonprofits, or social impact",
+   "Can name one Winter '27 innovation",
+   "Has contributed to the Trailblazer Community",
+   "Is attending Dreamforce for the first time"
+  ],
+  [
+   "Has earned a Trailhead Superbadge",
+   "Has heard about Slack Code",
+   "FREE SPACE Make Connections Here!",
+   "Has mentored someone in the Salesforce ecosystem",
+   "Has a favorite Salesforce mascot"
+  ],
+  [
+   "Has used Salesforce for less than 1 year",
+   "Has built or tested something with Agentforce",
+   "Is a Salesforce MVP",
+   "Has met a Salesforce MVP in person",
+   "Has spoken at a Salesforce community event"
+  ],
+  [
+   "Has helped someone earn their first Salesforce certification",
+   "Has used or explored Data Cloud",
+   "Has built an AI agent that takes an action",
+   "Has attended Dreamforce before",
+   "Has used Slack with Salesforce automation"
+  ]
+ ],
+ [
+  [
+   "Has a story about how the Salesforce community changed their career",
+   "Works with MuleSoft or integrations",
+   "Works with Marketing Cloud",
+   "Has stayed up way too late doing Trailhead",
+   "Has worked with Salesforce and another AI tool"
+  ],
+  [
+   "Has built or tested something with Agentforce",
+   "Has visited a Salesforce office",
+   "Has spoken at a Salesforce community event",
+   "Has used Salesforce for 10+ years",
+   "Knows what Headless 360 means"
+  ],
+  [
+   "Has built with Lightning Web Components (LWC)",
+   "Can explain the Enterprise AI Harness",
+   "FREE SPACE Make Connections Here!",
+   "Has a favorite Salesforce mascot",
+   "Has built an AI agent that takes an action"
+  ],
+  [
+   "Has mentored someone in the Salesforce ecosystem",
+   "Can teach you a Salesforce term in another language",
+   "Has attended a Salesforce community event in LATAM",
+   "Has said 'It works in sandbox!' this year",
+   "Loves automation and Flows"
+  ],
+  [
+   "Has helped someone earn their first Salesforce certification",
+   "Has a Salesforce sticker on their laptop",
+   "Can tell you a funny deployment story",
+   "Has made a real friend through the Salesforce community",
+   "Has attended Dreamforce before"
+  ]
+ ],
+ [
+  [
+   "Is passionate about education, nonprofits, or social impact",
+   "Can name one Winter '27 innovation",
+   "Has spoken at a Salesforce community event",
+   "Has helped someone earn their first Salesforce certification",
+   "Has visited a Salesforce office"
+  ],
+  [
+   "Has built with Lightning Web Components (LWC)",
+   "Has attended a Salesforce community event in LATAM",
+   "Has a favorite Salesforce mascot",
+   "Has said 'It works in sandbox!' this year",
+   "Has stayed up way too late doing Trailhead"
+  ],
+  [
+   "Can name a new Salesforce MVP from the Class of 2026",
+   "Speaks 3 or more languages",
+   "FREE SPACE Make Connections Here!",
+   "Has a story about how the Salesforce community changed their career",
+   "Is wearing Salesforce or Trailblazer swag"
+  ],
+  [
+   "Has experimented with MCPs in a Salesforce context",
+   "Has built or tested something with Agentforce",
+   "Has worked with Salesforce and another AI tool",
+   "Works with Tableau or analytics",
+   "Has used or explored Data Cloud"
+  ],
+  [
+   "Knows what Headless 360 means",
+   "Works with MuleSoft or integrations",
+   "Has deployed a Salesforce app or package",
+   "Has switched careers into Salesforce",
+   "Has used Slack with Salesforce automation"
+  ]
+ ],
+ [
+  [
+   "Has worked with Salesforce and another AI tool",
+   "Is attending Dreamforce for the first time",
+   "Has attended a Salesforce community event in LATAM",
+   "Loves automation and Flows",
+   "Can name 3 active Salesforce community groups in LATAM"
+  ],
+  [
+   "Knows what Headless 360 means",
+   "Has earned a Trailhead Superbadge",
+   "Can tell you a funny deployment story",
+   "Has met a Salesforce MVP in person",
+   "Has spoken at a Salesforce community event"
+  ],
+  [
+   "Has a favorite Salesforce mascot",
+   "Has visited a Salesforce office",
+   "FREE SPACE Make Connections Here!",
+   "Has built with Lightning Web Components (LWC)",
+   "Has organized a Salesforce community event"
+  ],
+  [
+   "Has used or explored Data Cloud",
+   "Has deployed a Salesforce app or package",
+   "Has a story about how the Salesforce community changed their career",
+   "Has used Agentforce DX",
+   "Has used Salesforce for less than 1 year"
+  ],
+  [
+   "Has built with native React in Salesforce",
+   "Has used Slack with Salesforce automation",
+   "Has used Salesforce for 10+ years",
+   "Works with Commerce Cloud",
+   "Has contributed to the Trailblazer Community"
+  ]
+ ],
+ [
+  [
+   "Has mentored someone in the Salesforce ecosystem",
+   "Has taken a selfie with a Salesforce mascot",
+   "Has built or tested something with Agentforce",
+   "Knows what Headless 360 means",
+   "Has spoken at a Salesforce community event"
+  ],
+  [
+   "Has visited a Salesforce office",
+   "Speaks 3 or more languages",
+   "Is passionate about education, nonprofits, or social impact",
+   "Has met a Salesforce MVP in person",
+   "Has experimented with MCPs in a Salesforce context"
+  ],
+  [
+   "Has used Agentforce DX",
+   "Has used Salesforce for 10+ years",
+   "FREE SPACE Make Connections Here!",
+   "Has stayed up way too late doing Trailhead",
+   "Has worked with Salesforce and another AI tool"
+  ],
+  [
+   "Has organized a Salesforce community event",
+   "Loves automation and Flows",
+   "Has built with native React in Salesforce",
+   "Can teach you a Salesforce term in another language",
+   "Has traveled more than 1,000 km to be at Dreamforce"
+  ],
+  [
+   "Has heard about Slack Code",
+   "Can name one Winter '27 innovation",
+   "Works with MuleSoft or integrations",
+   "Can tell you a funny deployment story",
+   "Has attended a Salesforce community event in LATAM"
+  ]
+ ],
+ [
+  [
+   "Has attended Dreamforce before",
+   "Has spoken at a Salesforce community event",
+   "Is wearing Salesforce or Trailblazer swag",
+   "Has a favorite Salesforce mascot",
+   "Is a Salesforce MVP"
+  ],
+  [
+   "Has made a real friend through the Salesforce community",
+   "Has accidentally worked in the wrong Salesforce org",
+   "Knows what Headless 360 means",
+   "Can name 3 active Salesforce community groups in LATAM",
+   "Has built an AI agent that takes an action"
+  ],
+  [
+   "Has worked with Salesforce and another AI tool",
+   "Has earned a Trailhead Superbadge",
+   "FREE SPACE Make Connections Here!",
+   "Has used or explored Data Cloud",
+   "Is or has been a Trailblazer Community Group Leader"
+  ],
+  [
+   "Is passionate about education, nonprofits, or social impact",
+   "Has used Salesforce for 10+ years",
+   "Is attending Dreamforce for the first time",
+   "Can explain the Enterprise AI Harness",
+   "Has deployed a Salesforce app or package"
+  ],
+  [
+   "Loves automation and Flows",
+   "Has heard about Slack Code",
+   "Works with Commerce Cloud",
+   "Has a Salesforce sticker on their laptop",
+   "Can recommend a great food spot near Moscone"
+  ]
+ ],
+ [
+  [
+   "Can name one Winter '27 innovation",
+   "Can explain the Enterprise AI Harness",
+   "Has organized a Salesforce community event",
+   "Has used or explored Data Cloud",
+   "Has fixed a production issue after 5 PM"
+  ],
+  [
+   "Has used Salesforce for less than 1 year",
+   "Has spoken at a Salesforce community event",
+   "Works with Commerce Cloud",
+   "Loves automation and Flows",
+   "Has attended a Salesforce community event in LATAM"
+  ],
+  [
+   "Has contributed to the Trailblazer Community",
+   "Has built with native React in Salesforce",
+   "FREE SPACE Make Connections Here!",
+   "Can tell you a funny deployment story",
+   "Has said 'It works in sandbox!' this year"
+  ],
+  [
+   "Is attending Dreamforce for the first time",
+   "Has built or tested something with Agentforce",
+   "Has heard about Slack Code",
+   "Is passionate about education, nonprofits, or social impact",
+   "Works with Tableau or analytics"
+  ],
+  [
+   "Has accidentally worked in the wrong Salesforce org",
+   "Has stayed up way too late doing Trailhead",
+   "Has earned a Trailhead Superbadge",
+   "Has used Agentforce DX",
+   "Works with Marketing Cloud"
+  ]
+ ],
+ [
+  [
+   "Has used Salesforce for 10+ years",
+   "Has used or explored Data Cloud",
+   "Has experimented with MCPs in a Salesforce context",
+   "Can name 3 active Salesforce community groups in LATAM",
+   "Can name a new Salesforce MVP from the Class of 2026"
+  ],
+  [
+   "Has mentored someone in the Salesforce ecosystem",
+   "Has switched careers into Salesforce",
+   "Loves automation and Flows",
+   "Has a favorite Salesforce mascot",
+   "Has visited a Salesforce office"
+  ],
+  [
+   "Has built with native React in Salesforce",
+   "Can tell you a funny deployment story",
+   "FREE SPACE Make Connections Here!",
+   "Has built or tested something with Agentforce",
+   "Has a Salesforce sticker on their laptop"
+  ],
+  [
+   "Has attended a Salesforce community event in LATAM",
+   "Speaks 3 or more languages",
+   "Has deployed a Salesforce app or package",
+   "Has used Salesforce for less than 1 year",
+   "Has helped someone earn their first Salesforce certification"
+  ],
+  [
+   "Has used Slack with Salesforce automation",
+   "Is passionate about education, nonprofits, or social impact",
+   "Has worked with Salesforce and another AI tool",
+   "Has stayed up way too late doing Trailhead",
+   "Can recommend a great food spot near Moscone"
+  ]
+ ],
+ [
+  [
+   "Has contributed to the Trailblazer Community",
+   "Has helped someone earn their first Salesforce certification",
+   "Has used Salesforce for less than 1 year",
+   "Can name 3 active Salesforce community groups in LATAM",
+   "Can tell you a funny deployment story"
+  ],
+  [
+   "Works with MuleSoft or integrations",
+   "Loves automation and Flows",
+   "Has deployed a Salesforce app or package",
+   "Has said 'It works in sandbox!' this year",
+   "Has attended Dreamforce before"
+  ],
+  [
+   "Has used Salesforce for 10+ years",
+   "Is or has been a Trailblazer Community Group Leader",
+   "FREE SPACE Make Connections Here!",
+   "Has switched careers into Salesforce",
+   "Has heard about Slack Code"
+  ],
+  [
+   "Is attending Dreamforce for the first time",
+   "Has used Agentforce DX",
+   "Has a Salesforce sticker on their laptop",
+   "Has built with Lightning Web Components (LWC)",
+   "Knows what Headless 360 means"
+  ],
+  [
+   "Has built with native React in Salesforce",
+   "Has fixed a production issue after 5 PM",
+   "Has used or explored Data Cloud",
+   "Speaks 3 or more languages",
+   "Works with Commerce Cloud"
+  ]
+ ],
+ [
+  [
+   "Has built or tested something with Agentforce",
+   "Has attended Dreamforce before",
+   "Has worked with Salesforce and another AI tool",
+   "Has built an AI agent that takes an action",
+   "Is a Salesforce MVP"
+  ],
+  [
+   "Has spoken at a Salesforce community event",
+   "Can tell you a funny deployment story",
+   "Is passionate about education, nonprofits, or social impact",
+   "Can teach you a Salesforce term in another language",
+   "Has 3 or more Salesforce certifications"
+  ],
+  [
+   "Can name 3 active Salesforce community groups in LATAM",
+   "Speaks 3 or more languages",
+   "FREE SPACE Make Connections Here!",
+   "Has a Salesforce sticker on their laptop",
+   "Is or has been a Trailblazer Community Group Leader"
+  ],
+  [
+   "Has built with native React in Salesforce",
+   "Can name a new Salesforce MVP from the Class of 2026",
+   "Has visited a Salesforce office",
+   "Has mentored someone in the Salesforce ecosystem",
+   "Has stayed up way too late doing Trailhead"
+  ],
+  [
+   "Has a story about how the Salesforce community changed their career",
+   "Has attended a Salesforce community event in LATAM",
+   "Has used or explored Data Cloud",
+   "Has made a real friend through the Salesforce community",
+   "Works with Marketing Cloud"
+  ]
+ ],
+ [
+  [
+   "Has attended a Salesforce community event in LATAM",
+   "Has used Salesforce for less than 1 year",
+   "Has fixed a production issue after 5 PM",
+   "Has spoken at a Salesforce community event",
+   "Has organized a Salesforce community event"
+  ],
+  [
+   "Can name 3 active Salesforce community groups in LATAM",
+   "Has a Salesforce sticker on their laptop",
+   "Is wearing Salesforce or Trailblazer swag",
+   "Has traveled more than 1,000 km to be at Dreamforce",
+   "Has earned a Trailhead Superbadge"
+  ],
+  [
+   "Has built with native React in Salesforce",
+   "Can tell you a funny deployment story",
+   "FREE SPACE Make Connections Here!",
+   "Loves automation and Flows",
+   "Has built an AI agent that takes an action"
+  ],
+  [
+   "Has accidentally worked in the wrong Salesforce org",
+   "Has deployed a Salesforce app or package",
+   "Has worked with Salesforce and another AI tool",
+   "Has used Slack with Salesforce automation",
+   "Has a story about how the Salesforce community changed their career"
+  ],
+  [
+   "Has built or tested something with Agentforce",
+   "Has taken a selfie with a Salesforce mascot",
+   "Has contributed to the Trailblazer Community",
+   "Has stayed up way too late doing Trailhead",
+   "Can explain the Enterprise AI Harness"
+  ]
+ ],
+ [
+  [
+   "Has built an AI agent that takes an action",
+   "Has a favorite Salesforce mascot",
+   "Is a Salesforce MVP",
+   "Works with Commerce Cloud",
+   "Has met a Salesforce MVP in person"
+  ],
+  [
+   "Works with MuleSoft or integrations",
+   "Has built with native React in Salesforce",
+   "Is wearing Salesforce or Trailblazer swag",
+   "Works with Marketing Cloud",
+   "Has spoken at a Salesforce community event"
+  ],
+  [
+   "Has built or tested something with Agentforce",
+   "Has traveled more than 1,000 km to be at Dreamforce",
+   "FREE SPACE Make Connections Here!",
+   "Has used or explored Data Cloud",
+   "Is passionate about education, nonprofits, or social impact"
+  ],
+  [
+   "Has experimented with MCPs in a Salesforce context",
+   "Has a story about how the Salesforce community changed their career",
+   "Has mentored someone in the Salesforce ecosystem",
+   "Has said 'It works in sandbox!' this year",
+   "Has earned a Trailhead Superbadge"
+  ],
+  [
+   "Is or has been a Trailblazer Community Group Leader",
+   "Has a Salesforce sticker on their laptop",
+   "Can explain the Enterprise AI Harness",
+   "Has used Salesforce for 10+ years",
+   "Can name 3 active Salesforce community groups in LATAM"
+  ]
+ ],
+ [
+  [
+   "Has made a real friend through the Salesforce community",
+   "Works with Commerce Cloud",
+   "Has built or tested something with Agentforce",
+   "Has said 'It works in sandbox!' this year",
+   "Has experimented with MCPs in a Salesforce context"
+  ],
+  [
+   "Has met a Salesforce MVP in person",
+   "Knows what Headless 360 means",
+   "Loves automation and Flows",
+   "Is attending Dreamforce for the first time",
+   "Has worked with Salesforce and another AI tool"
+  ],
+  [
+   "Has built an AI agent that takes an action",
+   "Has a Salesforce sticker on their laptop",
+   "FREE SPACE Make Connections Here!",
+   "Has switched careers into Salesforce",
+   "Has earned a Trailhead Superbadge"
+  ],
+  [
+   "Is wearing Salesforce or Trailblazer swag",
+   "Has used Agentforce DX",
+   "Has visited a Salesforce office",
+   "Has deployed a Salesforce app or package",
+   "Can teach you a Salesforce term in another language"
+  ],
+  [
+   "Speaks 3 or more languages",
+   "Is passionate about education, nonprofits, or social impact",
+   "Works with Marketing Cloud",
+   "Has heard about Slack Code",
+   "Has mentored someone in the Salesforce ecosystem"
+  ]
+ ],
+ [
+  [
+   "Has a Salesforce sticker on their laptop",
+   "Has used Salesforce for 10+ years",
+   "Has fixed a production issue after 5 PM",
+   "Has attended a Salesforce community event in LATAM",
+   "Has visited a Salesforce office"
+  ],
+  [
+   "Works with Tableau or analytics",
+   "Can recommend a great food spot near Moscone",
+   "Has earned a Trailhead Superbadge",
+   "Can name one Winter '27 innovation",
+   "Has spoken at a Salesforce community event"
+  ],
+  [
+   "Has contributed to the Trailblazer Community",
+   "Has built an AI agent that takes an action",
+   "FREE SPACE Make Connections Here!",
+   "Has mentored someone in the Salesforce ecosystem",
+   "Is attending Dreamforce for the first time"
+  ],
+  [
+   "Is a Salesforce MVP",
+   "Is passionate about education, nonprofits, or social impact",
+   "Knows what Headless 360 means",
+   "Can name 3 active Salesforce community groups in LATAM",
+   "Has traveled more than 1,000 km to be at Dreamforce"
+  ],
+  [
+   "Has used or explored Data Cloud",
+   "Works with Commerce Cloud",
+   "Speaks 3 or more languages",
+   "Has experimented with MCPs in a Salesforce context",
+   "Can tell you a funny deployment story"
+  ]
+ ],
+ [
+  [
+   "Has built with Lightning Web Components (LWC)",
+   "Has visited a Salesforce office",
+   "Has 3 or more Salesforce certifications",
+   "Has a favorite Salesforce mascot",
+   "Works with Tableau or analytics"
+  ],
+  [
+   "Has helped someone earn their first Salesforce certification",
+   "Can recommend a great food spot near Moscone",
+   "Is or has been a Trailblazer Community Group Leader",
+   "Has switched careers into Salesforce",
+   "Can teach you a Salesforce term in another language"
+  ],
+  [
+   "Can name a new Salesforce MVP from the Class of 2026",
+   "Has accidentally worked in the wrong Salesforce org",
+   "FREE SPACE Make Connections Here!",
+   "Can name one Winter '27 innovation",
+   "Has built a Flow in 2026"
+  ],
+  [
+   "Has worked with Salesforce and another AI tool",
+   "Works with Marketing Cloud",
+   "Has heard about Slack Code",
+   "Has used or explored Data Cloud",
+   "Has attended Dreamforce before"
+  ],
+  [
+   "Has used Slack with Salesforce automation",
+   "Has organized a Salesforce community event",
+   "Knows what Headless 360 means",
+   "Is a Salesforce MVP",
+   "Has built with native React in Salesforce"
+  ]
+ ],
+ [
+  [
+   "Has attended Dreamforce before",
+   "Has used Salesforce for less than 1 year",
+   "Is wearing Salesforce or Trailblazer swag",
+   "Has taken a selfie with a Salesforce mascot",
+   "Can explain the Enterprise AI Harness"
+  ],
+  [
+   "Works with MuleSoft or integrations",
+   "Has accidentally worked in the wrong Salesforce org",
+   "Has earned a Trailhead Superbadge",
+   "Speaks 3 or more languages",
+   "Is or has been a Trailblazer Community Group Leader"
+  ],
+  [
+   "Is a Salesforce MVP",
+   "Has switched careers into Salesforce",
+   "FREE SPACE Make Connections Here!",
+   "Has traveled more than 1,000 km to be at Dreamforce",
+   "Has experimented with MCPs in a Salesforce context"
+  ],
+  [
+   "Has worked with Salesforce and another AI tool",
+   "Can teach you a Salesforce term in another language",
+   "Has a favorite Salesforce mascot",
+   "Has deployed a Salesforce app or package",
+   "Has spoken at a Salesforce community event"
+  ],
+  [
+   "Has said 'It works in sandbox!' this year",
+   "Has built a Flow in 2026",
+   "Can name a new Salesforce MVP from the Class of 2026",
+   "Has fixed a production issue after 5 PM",
+   "Has met a Salesforce MVP in person"
+  ]
+ ],
+ [
+  [
+   "Has a story about how the Salesforce community changed their career",
+   "Has used Salesforce for 10+ years",
+   "Works with Commerce Cloud",
+   "Works with Tableau or analytics",
+   "Has used Salesforce for less than 1 year"
+  ],
+  [
+   "Has used Slack with Salesforce automation",
+   "Can name 3 active Salesforce community groups in LATAM",
+   "Has visited a Salesforce office",
+   "Has experimented with MCPs in a Salesforce context",
+   "Is attending Dreamforce for the first time"
+  ],
+  [
+   "Has 3 or more Salesforce certifications",
+   "Knows what Headless 360 means",
+   "FREE SPACE Make Connections Here!",
+   "Has attended Dreamforce before",
+   "Is a Salesforce MVP"
+  ],
+  [
+   "Has said 'It works in sandbox!' this year",
+   "Can name a new Salesforce MVP from the Class of 2026",
+   "Can name one Winter '27 innovation",
+   "Has mentored someone in the Salesforce ecosystem",
+   "Has met a Salesforce MVP in person"
+  ],
+  [
+   "Has built an AI agent that takes an action",
+   "Has attended a Salesforce community event in LATAM",
+   "Has spoken at a Salesforce community event",
+   "Has worked with Salesforce and another AI tool",
+   "Has built a Flow in 2026"
+  ]
+ ],
+ [
+  [
+   "Can recommend a great food spot near Moscone",
+   "Works with MuleSoft or integrations",
+   "Has met a Salesforce MVP in person",
+   "Has built with native React in Salesforce",
+   "Has made a real friend through the Salesforce community"
+  ],
+  [
+   "Has attended Dreamforce before",
+   "Has heard about Slack Code",
+   "Has spoken at a Salesforce community event",
+   "Is attending Dreamforce for the first time",
+   "Has used or explored Data Cloud"
+  ],
+  [
+   "Has deployed a Salesforce app or package",
+   "Has a favorite Salesforce mascot",
+   "FREE SPACE Make Connections Here!",
+   "Has accidentally worked in the wrong Salesforce org",
+   "Has experimented with MCPs in a Salesforce context"
+  ],
+  [
+   "Has said 'It works in sandbox!' this year",
+   "Has used Salesforce for less than 1 year",
+   "Can tell you a funny deployment story",
+   "Has 3 or more Salesforce certifications",
+   "Has built a Flow in 2026"
+  ],
+  [
+   "Has built an AI agent that takes an action",
+   "Has stayed up way too late doing Trailhead",
+   "Loves automation and Flows",
+   "Works with Marketing Cloud",
+   "Has used Salesforce for 10+ years"
+  ]
+ ],
+ [
+  [
+   "Has used Salesforce for 10+ years",
+   "Has built or tested something with Agentforce",
+   "Is wearing Salesforce or Trailblazer swag",
+   "Has deployed a Salesforce app or package",
+   "Works with Marketing Cloud"
+  ],
+  [
+   "Has spoken at a Salesforce community event",
+   "Has a Salesforce sticker on their laptop",
+   "Has earned a Trailhead Superbadge",
+   "Has built a Flow in 2026",
+   "Has helped someone earn their first Salesforce certification"
+  ],
+  [
+   "Has a favorite Salesforce mascot",
+   "Can name one Winter '27 innovation",
+   "FREE SPACE Make Connections Here!",
+   "Has mentored someone in the Salesforce ecosystem",
+   "Has organized a Salesforce community event"
+  ],
+  [
+   "Works with MuleSoft or integrations",
+   "Has heard about Slack Code",
+   "Has used Agentforce DX",
+   "Can tell you a funny deployment story",
+   "Can recommend a great food spot near Moscone"
+  ],
+  [
+   "Has attended a Salesforce community event in LATAM",
+   "Is passionate about education, nonprofits, or social impact",
+   "Is attending Dreamforce for the first time",
+   "Has 3 or more Salesforce certifications",
+   "Has used or explored Data Cloud"
+  ]
+ ],
+ [
+  [
+   "Can recommend a great food spot near Moscone",
+   "Has used Salesforce for 10+ years",
+   "Has fixed a production issue after 5 PM",
+   "Has built a Flow in 2026",
+   "Has organized a Salesforce community event"
+  ],
+  [
+   "Can name 3 active Salesforce community groups in LATAM",
+   "Has helped someone earn their first Salesforce certification",
+   "Works with MuleSoft or integrations",
+   "Has used or explored Data Cloud",
+   "Loves automation and Flows"
+  ],
+  [
+   "Has traveled more than 1,000 km to be at Dreamforce",
+   "Has built with Lightning Web Components (LWC)",
+   "FREE SPACE Make Connections Here!",
+   "Has worked with Salesforce and another AI tool",
+   "Works with Commerce Cloud"
+  ],
+  [
+   "Has built an AI agent that takes an action",
+   "Knows what Headless 360 means",
+   "Has used Agentforce DX",
+   "Can explain the Enterprise AI Harness",
+   "Has deployed a Salesforce app or package"
+  ],
+  [
+   "Has built with native React in Salesforce",
+   "Has a story about how the Salesforce community changed their career",
+   "Is passionate about education, nonprofits, or social impact",
+   "Has accidentally worked in the wrong Salesforce org",
+   "Has used Slack with Salesforce automation"
+  ]
+ ]
+]

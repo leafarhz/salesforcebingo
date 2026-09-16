@@ -1,0 +1,78 @@
+<template>
+    <section class="detail" role="dialog" aria-modal="true" aria-label="Bingo square">
+        <button type="button" class="detail__back" onclick={handleClose}>← Back to card</button>
+
+        <div class="detail__card">
+            <p class="detail__prompt">{square.promptText}</p>
+
+            <template lwc:if={square.isFreeSpace}>
+                <p class="detail__free">★ This one's yours already. Go make a connection.</p>
+            </template>
+
+            <template lwc:else>
+                <template lwc:if={isMarked}>
+                    <p class="detail__status">✓ Marked — you met <strong>{square.metPersonName}</strong></p>
+                </template>
+
+                <label class="detail__label" for="met">Who did you meet?</label>
+                <input
+                    id="met"
+                    class="detail__input"
+                    type="text"
+                    maxlength="120"
+                    autocomplete="off"
+                    placeholder="Start typing their name…"
+                    value={term}
+                    oninput={handleInput}
+                />
+
+                <template lwc:if={hasSelection}>
+                    <p class="detail__picked">
+                        Selected: <strong>{selectedName}</strong>
+                        <button type="button" class="detail__link" onclick={handleClear}>change</button>
+                    </p>
+                </template>
+
+                <template lwc:if={searching}>
+                    <p class="detail__muted">Searching…</p>
+                </template>
+
+                <template lwc:if={showResults}>
+                    <ul class="detail__results">
+                        <template for:each={searchResults} for:item="player">
+                            <li key={player.playerId}>
+                                <button
+                                    type="button"
+                                    class="detail__result"
+                                    data-id={player.playerId}
+                                    data-name={player.displayName}
+                                    onclick={handlePick}
+                                >{player.displayName}</button>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+
+                <template lwc:if={showNoMatch}>
+                    <p class="detail__muted">
+                        No registered player by that name. They need to scan the QR and
+                        register before you can claim this square.
+                    </p>
+                </template>
+
+                <template lwc:if={validationMessage}>
+                    <p class="detail__error" role="alert">{validationMessage}</p>
+                </template>
+
+                <div class="detail__actions">
+                    <button type="button" class="detail__btn detail__btn--primary"
+                            disabled={submitDisabled} onclick={handleSubmit}>{submitLabel}</button>
+                    <template lwc:if={isMarked}>
+                        <button type="button" class="detail__btn detail__btn--ghost"
+                                disabled={busy} onclick={handleUnmark}>Clear</button>
+                    </template>
+                </div>
+            </template>
+        </div>
+    </section>
+</template>

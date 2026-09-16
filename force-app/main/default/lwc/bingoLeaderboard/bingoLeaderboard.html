@@ -1,0 +1,38 @@
+<template>
+    <div class="board">
+        <template lwc:if={showBackLink}>
+            <p class="board__back"><a href={backUrl} class="board__link">← Back to my card</a></p>
+        </template>
+        <header class="board__head">
+            <h2 class="board__title">Leaderboard</h2>
+            <button type="button" class="board__refresh" onclick={handleRefresh}>Refresh</button>
+        </header>
+
+        <template lwc:if={errorMessage}>
+            <p class="board__error" role="alert">{errorMessage}</p>
+        </template>
+
+        <template lwc:if={loading}>
+            <p class="board__muted">Loading…</p>
+        </template>
+
+        <template lwc:if={isEmpty}>
+            <p class="board__muted">Nobody on the board yet. Go meet someone.</p>
+        </template>
+
+        <template lwc:if={hasRows}>
+            <ol class="board__list">
+                <template for:each={rows} for:item="row">
+                    <li key={row.displayName} class={row.rowClass}>
+                        <span class="row__rank">{row.rank}</span>
+                        <span class="row__name">
+                            <strong>{row.displayName}</strong>
+                            <small>{row.detail}</small>
+                        </span>
+                        <span class="row__total">{row.total}</span>
+                    </li>
+                </template>
+            </ol>
+        </template>
+    </div>
+</template>

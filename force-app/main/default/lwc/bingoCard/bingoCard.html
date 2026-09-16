@@ -1,0 +1,98 @@
+<template>
+    <div class="bingo">
+        <!-- ---------------------------------------------- Entry -->
+        <template lwc:if={showEntry}>
+            <div class="entry">
+                <h1 class="entry__title">Dreamforce Networking Bingo</h1>
+                <p class="entry__lede">
+                    Meet people, fill squares, win prizes. Your email is your key —
+                    come back on any device and your card is waiting.
+                </p>
+
+                <label class="entry__label" for="email">Email</label>
+                <input id="email" class="entry__input" type="email" inputmode="email"
+                       autocomplete="email" placeholder="you@example.com"
+                       value={email} oninput={handleEmailInput} />
+
+                <label class="entry__label" for="name">Display name (for the leaderboard)</label>
+                <input id="name" class="entry__input" type="text" maxlength="120"
+                       autocomplete="name" placeholder="How should we call you?"
+                       value={displayName} oninput={handleNameInput} />
+
+                <p class="entry__notice">
+                    Your email is stored for the duration of Dreamforce 2026 — it's how we
+                    find your card when you come back — and deleted after the raffle. It's
+                    never shown to anyone else. Your <em>display name</em> is public: it
+                    appears on the leaderboard and to people naming you, so pick whatever
+                    you're happy for others to see.
+                </p>
+
+                <template lwc:if={errorMessage}>
+                    <p class="bingo__error" role="alert">{errorMessage}</p>
+                </template>
+
+                <button type="button" class="entry__btn" disabled={startDisabled}
+                        onclick={handleStart}>{startLabel}</button>
+            </div>
+        </template>
+
+        <!-- ---------------------------------------------- Grid -->
+        <template lwc:elseif={showGrid}>
+            <header class="head">
+                <div class="head__top">
+                    <h1 class="head__title">{greeting}</h1>
+                    <button type="button" class="head__switch" onclick={handleSwitch}>{switchLabel}</button>
+                </div>
+                <p class="head__progress">{progressLabel}</p>
+                <template lwc:if={score}>
+                    <p class="head__score"><strong>{score.total}</strong> points — {scoreLabel}</p>
+                </template>
+                <div class="head__bar" role="progressbar">
+                    <div class="head__bar-fill" style={progressStyle}></div>
+                </div>
+            </header>
+
+            <template lwc:if={hasWon}>
+                <p class="win" role="status">{winMessage}</p>
+            </template>
+
+            <template lwc:if={errorMessage}>
+                <p class="bingo__error" role="alert">{errorMessage}</p>
+            </template>
+
+            <div class="grid">
+                <template for:each={squares} for:item="square">
+                    <c-bingo-square
+                        key={square.key}
+                        square={square}
+                        onsquareselect={handleSquareSelect}
+                    ></c-bingo-square>
+                </template>
+            </div>
+
+            <p class="hint">Tap any square to read it and record who you met.</p>
+
+            <template lwc:if={showLeaderboardLink}>
+                <p class="foot"><a href={leaderboardUrl} class="foot__link">See the leaderboard →</a></p>
+            </template>
+        </template>
+
+        <!-- ---------------------------------------------- Zoomed tile -->
+        <template lwc:elseif={showTile}>
+            <template lwc:if={errorMessage}>
+                <p class="bingo__error" role="alert">{errorMessage}</p>
+            </template>
+
+            <c-bingo-tile-detail
+                square={selected}
+                busy={busy}
+                searching={searching}
+                search-results={searchResults}
+                onsearch={handleSearch}
+                onmark={handleMark}
+                onunmark={handleUnmark}
+                onclose={handleClose}
+            ></c-bingo-tile-detail>
+        </template>
+    </div>
+</template>

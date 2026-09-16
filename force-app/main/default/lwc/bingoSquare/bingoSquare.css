@@ -1,0 +1,71 @@
+.tile {
+    /* Square cells regardless of viewport, so the 5x5 never distorts. */
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.35rem;
+
+    border: 1px solid #c9c9c9;
+    border-radius: 0.5rem;
+    background: #ffffff;
+    color: #181818;
+    font-family: inherit;
+    font-size: 0.62rem;
+    line-height: 1.15;
+    text-align: center;
+    cursor: pointer;
+
+    /* Stops a long unbroken prompt from blowing out the column. */
+    overflow: hidden;
+    overflow-wrap: anywhere;
+    transition: background-color 0.12s ease, transform 0.08s ease;
+}
+
+.tile:active {
+    transform: scale(0.96);
+}
+
+.tile:focus-visible {
+    outline: 2px solid #0176d3;
+    outline-offset: 2px;
+}
+
+.tile--marked {
+    background: #d7f4e3;
+    border-color: #2e844a;
+    color: #0a5228;
+    font-weight: 600;
+}
+
+.tile--free {
+    background: #0176d3;
+    border-color: #0176d3;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+/* Optimistic state: shown as marked, not yet confirmed by the server. */
+.tile--pending {
+    opacity: 0.6;
+}
+
+.tile__text {
+    display: block;
+}
+
+.tile__check,
+.tile__star {
+    font-size: 0.85rem;
+    line-height: 1;
+}
+
+@media (min-width: 30rem) {
+    .tile {
+        font-size: 0.72rem;
+        padding: 0.5rem;
+    }
+}

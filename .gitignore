@@ -1,0 +1,17 @@
+# Salesforce CLI local state — contains org auth + source tracking
+.sf/
+.sfdx/
+.localdevserver/
+deploy-options.json
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Scratch output from one-off destructive deploys
+destructive/destructiveChanges.xml

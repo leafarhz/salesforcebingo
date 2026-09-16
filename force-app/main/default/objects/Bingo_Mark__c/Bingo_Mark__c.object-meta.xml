@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Append-only log of square marks. Guest users can INSERT but never UPDATE (System.TypeException: DML operation UPDATE not allowed), so marking and un-marking are both inserts and current state is the latest row per cell. Deliberately has NO lookup fields: a guest cannot reference a parent record it lacks access to.</description>
+    <enableActivities>false</enableActivities>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>false</enableSearch>
+    <label>Bingo Mark</label>
+    <nameField><displayFormat>BM-{000000}</displayFormat><label>Mark Number</label><type>AutoNumber</type></nameField>
+    <pluralLabel>Bingo Marks</pluralLabel>
+    <sharingModel>Private</sharingModel>
+    <visibility>Public</visibility>
+</CustomObject>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Guest users get NO record access from OWD, and `without sharing` Apex does not
+    override that for them (verified: admin saw 55 prompts, guest saw 0 inside the
+    same without-sharing class). A guest user sharing rule is the only supported
+    way to grant it. Prompts are public game content — they are printed on the card.
+-->
+<SharingRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sharingGuestRules>
+        <fullName>Bingo_Prompts_Readable_By_Guest</fullName>
+        <accessLevel>Read</accessLevel>
+        <criteriaItems>
+            <field>Active__c</field>
+            <operation>equals</operation>
+            <value>true</value>
+        </criteriaItems>
+        <includeHVUOwnedRecords>false</includeHVUOwnedRecords>
+        <label>Bingo Prompts Readable By Guest</label>
+        <sharedTo>
+            <guestUser>Networking_Bingo</guestUser>
+        </sharedTo>
+    </sharingGuestRules>
+</SharingRules>

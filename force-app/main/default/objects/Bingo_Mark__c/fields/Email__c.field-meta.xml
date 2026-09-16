@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Email__c</fullName>
+    <description>Lowercased player email. A plain text key rather than a lookup, so the insert needs no cross-reference access.</description>
+    <externalId>true</externalId>
+    <label>Email</label>
+    <length>255</length>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

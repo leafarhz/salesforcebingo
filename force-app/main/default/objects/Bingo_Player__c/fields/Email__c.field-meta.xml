@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Email__c</fullName>
+    <description>Lowercased email. Unique so a returning player cannot create a second row — the duplicate insert is caught and the existing row reused.</description>
+    <externalId>true</externalId>
+    <label>Email</label>
+    <length>255</length>
+    <required>true</required>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>true</unique>
+</CustomField>

@@ -1,0 +1,18 @@
+<template>
+    <button
+        type="button"
+        class={cssClass}
+        aria-label={ariaLabel}
+        aria-pressed={square.isMarked}
+        onclick={handleClick}
+    >
+        <span class="tile__text">{shortText}</span>
+
+        <template lwc:if={showCheck}>
+            <span class="tile__check" aria-hidden="true">✓</span>
+        </template>
+        <template lwc:if={square.isFreeSpace}>
+            <span class="tile__star" aria-hidden="true">★</span>
+        </template>
+    </button>
+</template>
