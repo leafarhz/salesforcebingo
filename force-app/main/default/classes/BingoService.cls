@@ -93,9 +93,31 @@ public without sharing class BingoService {
 
     // ------------------------------------------------------------ Entry points
 
+    /**
+     * Restores an existing player's card. Returns null if the email has never been
+     * registered, so the caller can show the entry form.
+     *
+     * Deliberately does NOT create anything: a resume carries no display name, and a
+     * player created without one can never acquire it later — guests cannot UPDATE.
+     * They would be invisible in the typeahead and "Anonymous" on the leaderboard,
+     * permanently, with no way back.
+     */
+    @AuraEnabled
+    public static CardDTO resumeSession(String email) {
+        String key = normalizeEmail(email);
+        if ([SELECT COUNT() FROM Bingo_Player__c WHERE Email__c = :key] == 0) {
+            return null;
+        }
+        return buildCard(key);
+    }
+
     @AuraEnabled
     public static CardDTO startSession(String email, String displayName, Boolean consented) {
         String key = normalizeEmail(email);
+        if (String.isBlank(displayName)) {
+            throw new AuraHandledException(
+                'Please add a display name — it is how other players find you, and it cannot be changed later.');
+        }
         registerPlayer(key, displayName, consented);
         return buildCard(key);
     }

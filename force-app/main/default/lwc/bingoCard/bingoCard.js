@@ -1,5 +1,6 @@
 import { LightningElement, api, track } from 'lwc';
 import startSession from '@salesforce/apex/BingoService.startSession';
+import resumeSession from '@salesforce/apex/BingoService.resumeSession';
 import markSquare from '@salesforce/apex/BingoService.markSquare';
 import unmarkSquare from '@salesforce/apex/BingoService.unmarkSquare';
 import searchPlayers from '@salesforce/apex/BingoService.searchPlayers';
@@ -81,7 +82,7 @@ export default class BingoCard extends LightningElement {
         // Only an email is required. Storing it is how the game works, not an
         // optional extra, so it is explained in a notice rather than gated behind
         // a checkbox nobody can decline — a forced tick isn't consent.
-        return this.loading || !this.email.trim();
+        return this.loading || !this.email.trim() || !this.displayName.trim();
     }
 
     get startLabel() {
@@ -203,15 +204,21 @@ export default class BingoCard extends LightningElement {
         }
     }
 
-    /** Restore on reload without re-asking for consent already given. */
+    /**
+     * Restore on reload. Uses resumeSession, which never creates a player — a
+     * resume has no display name to give one, and a nameless player can never be
+     * fixed afterwards because guests cannot update records.
+     */
     async resume() {
         this.loading = true;
         try {
-            this.card = await startSession({
-                email: this.email,
-                displayName: null,
-                consented: true
-            });
+            const restored = await resumeSession({ email: this.email });
+            if (!restored) {
+                this.safeClearStoredEmail();    // unknown email: register properly
+                this.view = VIEW.ENTRY;
+                return;
+            }
+            this.card = restored;
             this.view = VIEW.GRID;
         } catch (error) {
             // A stale or now-invalid email should not trap the player on a dead screen.

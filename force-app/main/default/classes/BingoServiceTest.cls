@@ -248,6 +248,44 @@ private class BingoServiceTest {
         System.assertEquals(0, BingoService.tokenScore('de', 'silva'), 'particle too short');
     }
 
+    // ------------------------------------------------------------ Resume
+
+    @IsTest
+    static void resumeReturnsNullForAnUnknownEmail() {
+        seedPrompts(30);
+        System.assertEquals(null, BingoService.resumeSession('never.seen@example.com'),
+            'An unregistered email must not be silently registered by a resume.');
+        System.assertEquals(0, [SELECT COUNT() FROM Bingo_Player__c],
+            'Resuming must never create a player.');
+    }
+
+    @IsTest
+    static void resumeRestoresAnExistingCard() {
+        seedPrompts(30);
+        Id ada = register('ada@example.com', 'Ada');
+        BingoService.startSession('back@example.com', 'Back Again', true);
+        BingoService.markSquare('back@example.com', 0, 0, ada);
+
+        BingoService.CardDTO restored = BingoService.resumeSession('back@example.com');
+        System.assertNotEquals(null, restored);
+        System.assertEquals('Back Again', restored.displayName, 'Display name must survive a resume.');
+        System.assertEquals(1, restored.markedCount, 'Marks must survive a resume.');
+    }
+
+    /** A nameless player is unfindable and unfixable, since guests cannot update. */
+    @IsTest
+    static void registeringWithoutADisplayNameIsRejected() {
+        seedPrompts(30);
+        try {
+            BingoService.startSession('noname@example.com', '   ', true);
+            System.assert(false, 'A blank display name must be rejected.');
+        } catch (AuraHandledException e) {
+            System.assert(true);
+        }
+        System.assertEquals(0, [SELECT COUNT() FROM Bingo_Player__c],
+            'No player should have been created.');
+    }
+
     // ------------------------------------------------------------ Marking
 
     @IsTest
