@@ -139,25 +139,21 @@ public without sharing class BingoService {
             LIMIT 2000
         ]) {
             List<String> nameTokens = tokenize(player.Display_Name__c);
-            Boolean hit = false;
-            Boolean leading = false;
+            Integer best = 0;
             for (String needle : needles) {
                 for (Integer i = 0; i < nameTokens.size(); i++) {
-                    String nameToken = nameTokens[i];
-                    if (nameToken.startsWith(needle) || needle.startsWith(nameToken)) {
-                        hit = true;
-                        if (i == 0) { leading = true; }
-                    }
+                    Integer score = tokenScore(nameTokens[i], needle, nameTokens.size() == 1);
+                    if (score > 0 && i == 0) { score++; }   // first names outrank surnames
+                    if (score > best) { best = score; }
                 }
             }
-            if (!hit) {
+            if (best == 0) {
                 continue;
             }
             PlayerRefDTO ref = new PlayerRefDTO();
             ref.playerId    = player.Id;
             ref.displayName = player.Display_Name__c;
-            // Matches on a first name surface above matches on a surname.
-            if (leading) { starts.add(ref); } else { other.add(ref); }
+            if (best >= 3) { starts.add(ref); } else { other.add(ref); }
         }
 
         for (PlayerRefDTO ref : starts) {
@@ -167,6 +163,45 @@ public without sharing class BingoService {
             if (results.size() < 10) { results.add(ref); }
         }
         return results;
+    }
+
+    /**
+     * How well one name token matches one typed token. 0 means no match.
+     *
+     * Substring in EITHER direction, not just a prefix, so "nandez" finds
+     * "Hernandez" and "Rafael" finds "Rafa".
+     *
+     * The three-character floor matters: Spanish and Portuguese names carry
+     * particles like de / la / dos, and a bare contains would make "Maria de la
+     * Cruz" match any query containing "de". Exact equality is exempt so someone
+     * genuinely called "Al" is still findable.
+     */
+    @TestVisible
+    private static Integer tokenScore(String nameToken, String needle) {
+        return tokenScore(nameToken, needle, false);
+    }
+
+    private static Integer tokenScore(String nameToken, String needle, Boolean isWholeName) {
+        if (String.isBlank(nameToken) || String.isBlank(needle)) {
+            return 0;
+        }
+        // Exact equality is only exempt from the floor when the token IS the whole
+        // registered name — otherwise "de" == "de" makes every Spanish or Portuguese
+        // name match every other one.
+        if (nameToken == needle && (isWholeName || nameToken.length() >= 3)) {
+            return 3;
+        }
+        Integer shortest = Math.min(nameToken.length(), needle.length());
+        if (shortest < 3) {
+            return 0;
+        }
+        if (nameToken.startsWith(needle) || needle.startsWith(nameToken)) {
+            return 2;
+        }
+        if (nameToken.contains(needle) || needle.contains(nameToken)) {
+            return 1;
+        }
+        return 0;
     }
 
     /** Lowercased, accent-folded word tokens. */

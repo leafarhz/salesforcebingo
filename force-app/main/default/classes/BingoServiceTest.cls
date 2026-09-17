@@ -206,6 +206,48 @@ private class BingoServiceTest {
         System.assertEquals(0, BingoService.searchPlayers('  ', null).size());
     }
 
+    @IsTest
+    static void searchMatchesTheMiddleOfAName() {
+        seedPrompts(30);
+        register('h@example.com', 'Hernandez');
+        BingoService.startSession('seeker@example.com', 'Seeker', true);
+
+        System.assertEquals(1, BingoService.searchPlayers('nande', 'seeker@example.com').size(),
+            'A substring from the middle must match — startsWith alone would miss this.');
+    }
+
+    /** Particles like de / la / dos must not make everyone match everyone. */
+    @IsTest
+    static void shortParticlesDoNotMatchEverything() {
+        seedPrompts(30);
+        register('m@example.com', 'Maria de la Cruz');
+        BingoService.startSession('seeker@example.com', 'Seeker', true);
+
+        System.assertEquals(0, BingoService.searchPlayers('Alan de Silva', 'seeker@example.com').size(),
+            'Sharing only the particle "de" must not count as a match.');
+        System.assertEquals(1, BingoService.searchPlayers('Cruz', 'seeker@example.com').size(),
+            'A real surname still matches.');
+    }
+
+    @IsTest
+    static void shortNamesAreStillFindableByExactMatch() {
+        seedPrompts(30);
+        register('al@example.com', 'Al');
+        BingoService.startSession('seeker@example.com', 'Seeker', true);
+
+        System.assertEquals(1, BingoService.searchPlayers('Al', 'seeker@example.com').size(),
+            'An exact match is exempt from the three-character floor.');
+    }
+
+    @IsTest
+    static void tokenScoreRanksExactAbovePrefixAboveContains() {
+        System.assertEquals(3, BingoService.tokenScore('rafa', 'rafa'), 'exact');
+        System.assertEquals(2, BingoService.tokenScore('rafael', 'rafa'), 'prefix');
+        System.assertEquals(1, BingoService.tokenScore('hernandez', 'nande'), 'contains');
+        System.assertEquals(0, BingoService.tokenScore('hernandez', 'xyz'), 'no overlap');
+        System.assertEquals(0, BingoService.tokenScore('de', 'silva'), 'particle too short');
+    }
+
     // ------------------------------------------------------------ Marking
 
     @IsTest
