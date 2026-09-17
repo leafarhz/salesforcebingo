@@ -140,10 +140,61 @@ private class BingoServiceTest {
         register('alan@example.com', 'Alan Turing');
         register('me@example.com', 'Alan Me');
 
-        List<BingoService.PlayerRefDTO> hits = BingoService.searchPlayers('Alan', 'me@example.com');
+        List<BingoService.PlayerRefDTO> hits = BingoService.searchPlayers('Turing', 'me@example.com');
         System.assertEquals(1, hits.size(), 'Should find Alan Turing but exclude myself.');
         System.assertEquals('Alan Turing', hits[0].displayName);
         System.assertNotEquals(null, hits[0].playerId, 'An opaque handle must be returned.');
+    }
+
+    /** The reported bug: someone registered as "Rafa" was unfindable by full name. */
+    @IsTest
+    static void typingAFullNameFindsSomeoneRegisteredWithAShortOne() {
+        seedPrompts(30);
+        register('rafa@example.com', 'Rafa');
+        BingoService.startSession('seeker@example.com', 'Seeker', true);
+
+        List<BingoService.PlayerRefDTO> hits =
+            BingoService.searchPlayers('Rafael Hernandez', 'seeker@example.com');
+        System.assertEquals(1, hits.size(), '"Rafael Hernandez" must find "Rafa".');
+        System.assertEquals('Rafa', hits[0].displayName);
+    }
+
+    @IsTest
+    static void typingAShortNameStillFindsAFullRegistration() {
+        seedPrompts(30);
+        register('rh@example.com', 'Rafael Hernandez');
+        BingoService.startSession('seeker@example.com', 'Seeker', true);
+
+        System.assertEquals(1, BingoService.searchPlayers('Rafa', 'seeker@example.com').size(),
+            '"Rafa" must find "Rafael Hernandez".');
+        System.assertEquals(1, BingoService.searchPlayers('Hernandez', 'seeker@example.com').size(),
+            'A surname on its own must match too.');
+    }
+
+    @IsTest
+    static void searchIgnoresAccents() {
+        seedPrompts(30);
+        register('accent@example.com', 'Hernández Muñoz');
+        BingoService.startSession('seeker@example.com', 'Seeker', true);
+
+        System.assertEquals(1, BingoService.searchPlayers('Hernandez', 'seeker@example.com').size(),
+            'Unaccented input must find an accented name.');
+        System.assertEquals(1, BingoService.searchPlayers('Muñoz', 'seeker@example.com').size(),
+            'Accented input must match too.');
+    }
+
+    @IsTest
+    static void firstNameMatchesRankAboveSurnameMatches() {
+        seedPrompts(30);
+        register('a@example.com', 'Silva Rodriguez');   // matches on the surname
+        register('b@example.com', 'Rodrigo Alves');     // matches on the first name
+        BingoService.startSession('seeker@example.com', 'Seeker', true);
+
+        List<BingoService.PlayerRefDTO> hits =
+            BingoService.searchPlayers('Rodri', 'seeker@example.com');
+        System.assertEquals(2, hits.size(), 'Both should match.');
+        System.assertEquals('Rodrigo Alves', hits[0].displayName,
+            'A first-name match should surface first.');
     }
 
     @IsTest

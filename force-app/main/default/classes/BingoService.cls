@@ -100,33 +100,103 @@ public without sharing class BingoService {
         return buildCard(key);
     }
 
-    /** Typeahead over registered players. Returns an opaque id, never an email. */
+    /**
+     * Typeahead over registered players. Returns an opaque id, never an email.
+     *
+     * Matching happens in Apex rather than SOQL because a single LIKE '%term%' only
+     * matches a contiguous substring in one direction: someone registered as "Rafa"
+     * is unfindable by typing "Rafael Hernandez", which is exactly what people do.
+     * Here every token of the query is compared against every token of the name in
+     * both directions, so "Rafa" and "Rafael Hernandez" find each other.
+     *
+     * Accents are folded, because "Hernandez" should find "Hernández".
+     *
+     * Safe because the population is a single event — bounded below, and the cost is
+     * a few hundred string comparisons.
+     */
     @AuraEnabled(cacheable=false)
     public static List<PlayerRefDTO> searchPlayers(String term, String excludeEmail) {
         List<PlayerRefDTO> results = new List<PlayerRefDTO>();
         if (String.isBlank(term) || term.trim().length() < 2) {
             return results;
         }
-        String pattern = '%' + term.trim() + '%';
-        String me   = String.isBlank(excludeEmail) ? '' : excludeEmail.trim().toLowerCase();
+        List<String> needles = tokenize(term);
+        if (needles.isEmpty()) {
+            return results;
+        }
 
-        // Each person counts once per card, so anyone already claimed is filtered
-        // out here rather than left to fail on submit.
-        Set<String> used = peopleAlreadyUsed(me);
-        used.add(me);
+        String me = String.isBlank(excludeEmail) ? '' : excludeEmail.trim().toLowerCase();
+        Set<String> skip = peopleAlreadyUsed(me);
+        skip.add(me);
 
-        for (Bingo_Player__c p : [
+        List<PlayerRefDTO> starts = new List<PlayerRefDTO>();
+        List<PlayerRefDTO> other  = new List<PlayerRefDTO>();
+
+        for (Bingo_Player__c player : [
             SELECT Id, Display_Name__c FROM Bingo_Player__c
-            WHERE Display_Name__c LIKE :pattern AND Email__c NOT IN :used
+            WHERE Email__c NOT IN :skip AND Display_Name__c != null
             ORDER BY Display_Name__c
-            LIMIT 10
+            LIMIT 2000
         ]) {
+            List<String> nameTokens = tokenize(player.Display_Name__c);
+            Boolean hit = false;
+            Boolean leading = false;
+            for (String needle : needles) {
+                for (Integer i = 0; i < nameTokens.size(); i++) {
+                    String nameToken = nameTokens[i];
+                    if (nameToken.startsWith(needle) || needle.startsWith(nameToken)) {
+                        hit = true;
+                        if (i == 0) { leading = true; }
+                    }
+                }
+            }
+            if (!hit) {
+                continue;
+            }
             PlayerRefDTO ref = new PlayerRefDTO();
-            ref.playerId    = p.Id;
-            ref.displayName = p.Display_Name__c;
-            results.add(ref);
+            ref.playerId    = player.Id;
+            ref.displayName = player.Display_Name__c;
+            // Matches on a first name surface above matches on a surname.
+            if (leading) { starts.add(ref); } else { other.add(ref); }
+        }
+
+        for (PlayerRefDTO ref : starts) {
+            if (results.size() < 10) { results.add(ref); }
+        }
+        for (PlayerRefDTO ref : other) {
+            if (results.size() < 10) { results.add(ref); }
         }
         return results;
+    }
+
+    /** Lowercased, accent-folded word tokens. */
+    @TestVisible
+    private static List<String> tokenize(String value) {
+        List<String> out = new List<String>();
+        if (String.isBlank(value)) {
+            return out;
+        }
+        String folded = foldAccents(value.toLowerCase());
+        for (String part : folded.split('[^a-z0-9]+')) {
+            if (String.isNotBlank(part)) {
+                out.add(part);
+            }
+        }
+        return out;
+    }
+
+    /** Apex has no locale-aware normaliser, so fold the characters LATAM names use. */
+    @TestVisible
+    private static String foldAccents(String value) {
+        String out = value;
+        out = out.replaceAll('[áàâãäå]', 'a');
+        out = out.replaceAll('[éèêë]',   'e');
+        out = out.replaceAll('[íìîï]',   'i');
+        out = out.replaceAll('[óòôõö]',  'o');
+        out = out.replaceAll('[úùûü]',   'u');
+        out = out.replaceAll('[ñ]',      'n');
+        out = out.replaceAll('[çc]',     'c');
+        return out;
     }
 
     @AuraEnabled
