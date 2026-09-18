@@ -1,0 +1,479 @@
+<title>The room, mapped — Dreamforce 2026 LATAM Community Meetup</title>
+
+<style>
+  :root {
+    /* One committed visual world: a room at night, people as warm points
+       against cool structure. Neutrals are biased blue, not default grey. */
+    --ground:   #0e1621;
+    --surface:  #17222f;
+    --raised:   #1e2b3a;
+    --ink:      #edf1f5;
+    --muted:    #8697a9;
+    --faint:    #4d6076;
+    --edge:     #3a5a78;
+    --edge-hi:  #7fb4dd;
+
+    /* Sequential ramp, one hue family, light to dark — encodes people met. */
+    --warm-1:   #ffd2b4;
+    --warm-2:   #ffa87c;
+    --warm-3:   #ff8a5b;
+    --warm-4:   #e0603a;
+
+    --serif: ui-serif, Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+    --sans:  system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --mono:  ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------------------------------------------------------- hero */
+  .hero { position: relative; min-height: 78vh; }
+
+  #graph { display: block; width: 100%; height: 78vh; touch-action: none; }
+
+  .titleblock {
+    position: absolute; top: clamp(1.5rem, 4vw, 3rem); left: clamp(1.5rem, 4vw, 3rem);
+    max-width: 24rem; pointer-events: none;
+  }
+
+  .eyebrow {
+    margin: 0 0 0.9rem;
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  h1 {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(2.6rem, 7vw, 4.4rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  .standfirst {
+    margin: 1rem 0 0;
+    max-width: 21rem;
+    color: var(--muted);
+    line-height: 1.55;
+    font-size: 0.95rem;
+  }
+
+  /* Readout follows the cursor's subject, bottom-left of the canvas. */
+  .readout {
+    position: absolute; left: clamp(1.5rem, 4vw, 3rem); bottom: clamp(1.5rem, 4vw, 3rem);
+    min-height: 4.2rem; pointer-events: none;
+  }
+  .readout__name {
+    margin: 0;
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    line-height: 1.1;
+  }
+  .readout__detail {
+    margin: 0.35rem 0 0;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--warm-3);
+    font-variant-numeric: tabular-nums;
+  }
+  .readout__hint { margin: 0; color: var(--faint); font-size: 0.82rem; }
+
+  /* ---------------------------------------------------------- body */
+  main {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: clamp(3rem, 8vw, 6rem) clamp(1.5rem, 4vw, 3rem) 5rem;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+    gap: 1px;
+    background: var(--raised);
+    border: 1px solid var(--raised);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .stat { background: var(--surface); padding: 1.15rem 1.25rem; }
+  .stat__n {
+    display: block;
+    font-family: var(--mono);
+    font-size: 1.85rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.03em;
+  }
+  .stat__l {
+    display: block; margin-top: 0.3rem;
+    font-size: 0.72rem; color: var(--muted); line-height: 1.35;
+  }
+
+  h2 {
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: 1.75rem;
+    letter-spacing: -0.01em;
+    margin: 3.5rem 0 1.25rem;
+  }
+
+  p { line-height: 1.65; color: var(--ink); max-width: 38rem; }
+  p.dim { color: var(--muted); }
+
+  .rank { list-style: none; margin: 0; padding: 0; }
+  .rank li {
+    display: grid;
+    grid-template-columns: 2rem 1fr auto;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.62rem 0;
+    border-bottom: 1px solid var(--raised);
+  }
+  .rank__pos { font-family: var(--mono); font-size: 0.78rem; color: var(--faint); }
+  .rank__bar { height: 3px; background: var(--warm-3); border-radius: 0 2px 2px 0; }
+  .rank__val {
+    font-family: var(--mono); font-size: 0.85rem;
+    font-variant-numeric: tabular-nums; color: var(--muted);
+  }
+  .rank__name { display: flex; align-items: center; gap: 0.7rem; min-width: 0; }
+  .rank__label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .pull {
+    margin: 3rem 0;
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--warm-3);
+    font-family: var(--serif);
+    font-size: 1.5rem;
+    line-height: 1.35;
+    max-width: 34rem;
+  }
+  .pull small {
+    display: block; margin-top: 0.85rem;
+    font-family: var(--mono); font-size: 0.72rem;
+    color: var(--muted); letter-spacing: 0.06em;
+  }
+
+  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 2.5rem; }
+  .cols h3 {
+    font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin: 0 0 0.9rem; font-weight: 400;
+  }
+  .plist { list-style: none; margin: 0; padding: 0; }
+  .plist li {
+    display: flex; gap: 0.8rem; align-items: baseline;
+    padding: 0.5rem 0; border-bottom: 1px solid var(--raised);
+    font-size: 0.9rem; line-height: 1.35;
+  }
+  .plist b {
+    font-family: var(--mono); font-weight: 400; font-size: 0.8rem;
+    color: var(--warm-3); font-variant-numeric: tabular-nums; flex: 0 0 2rem;
+  }
+
+  footer {
+    margin-top: 4.5rem; padding-top: 1.75rem;
+    border-top: 1px solid var(--raised);
+    color: var(--faint); font-size: 0.8rem; line-height: 1.6; max-width: 38rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<div class="hero">
+  <canvas id="graph"></canvas>
+  <div class="titleblock">
+    <p class="eyebrow">Dreamforce 2026 · LATAM Community Meetup</p>
+    <h1>The room, mapped</h1>
+    <p class="standfirst">
+      Every line is two people who actually met, recorded as it happened.
+      Thirty-five minutes, one bingo card each.
+    </p>
+  </div>
+  <div class="readout" id="readout">
+    <p class="readout__hint">Hover anyone to see who they met.</p>
+  </div>
+</div>
+
+<main>
+  <section class="stats" id="stats"></section>
+
+  <h2>Nearly half the room met each other</h2>
+  <p>
+    Thirty-one people registered and twenty-seven ended up on the map. Between them they
+    made <strong>226 distinct introductions</strong> — out of the 465 pairings the room could
+    theoretically have produced, which is a little under half of everything possible in
+    thirty-five minutes.
+  </p>
+  <p class="dim">
+    117 of those pairs were confirmed from both sides: two people independently found each
+    other and each claimed a square. Those are drawn brighter.
+  </p>
+
+  <h2>Most people met</h2>
+  <ol class="rank" id="rank"></ol>
+
+  <blockquote class="pull">
+    “Is wearing Salesforce or Trailblazer swag” was claimed exactly once — at Dreamforce.
+    <small>Meanwhile “has a Salesforce sticker on their laptop” topped the board at twelve.</small>
+  </blockquote>
+
+  <div class="cols">
+    <div>
+      <h3>Easiest to find</h3>
+      <ul class="plist" id="most"></ul>
+    </div>
+    <div>
+      <h3>Hardest to find</h3>
+      <ul class="plist" id="least"></ul>
+    </div>
+  </div>
+
+  <p class="dim" style="margin-top:2.5rem">
+    The pattern is not subtle: every prompt that could be settled by glancing at someone got
+    claimed repeatedly, and the ones needing an actual conversation — a real friendship, an
+    explanation of the AI harness — lagged behind. All 55 prompts were claimed at least once,
+    so no square on the card was dead weight.
+  </p>
+
+  <footer>
+    Built and run on Salesforce as a guest-access Experience Cloud site. Every connection here
+    was self-reported by a player naming the person they had just met, so the map records who
+    said they met whom — 356 claims in total, none of them retracted.
+    Display names only; no contact details are shown or stored in this page.
+  </footer>
+</main>
+
+<script>
+window.addEventListener('error', (e) => {
+  const r = document.getElementById('readout');
+  if (r) r.innerHTML = '<p class="readout__detail">JS: ' +
+    String(e.message).replace(/</g, '&lt;') + ' @' + (e.lineno || '?') + '</p>';
+});
+
+const DATA = {"nodes":[{"n":"maria jose","g":24,"r":18,"d":25},{"n":"Adriana","g":23,"r":14,"d":24},{"n":"Sid","g":24,"r":12,"d":24},{"n":"Ramesh","g":24,"r":14,"d":24},{"n":"Lorena Vargas","g":23,"r":12,"d":22},{"n":"Jose M.","g":17,"r":25,"d":21},{"n":"Rafa Mendoza","g":16,"r":17,"d":21},{"n":"Celeste","g":18,"r":17,"d":20},{"n":"Lucy","g":18,"r":15,"d":20},{"n":"Dax","g":17,"r":12,"d":20},{"n":"Alex","g":19,"r":12,"d":19},{"n":"Kipper","g":19,"r":16,"d":19},{"n":"Danisha","g":18,"r":17,"d":19},{"n":"Patricia Vaz","g":19,"r":13,"d":18},{"n":"Daniel R","g":17,"r":14,"d":18},{"n":"KTV","g":15,"r":15,"d":17},{"n":"Lucia","g":16,"r":18,"d":16},{"n":"Karina","g":9,"r":14,"d":16},{"n":"Helen","g":0,"r":15,"d":15},{"n":"Rafa","g":1,"r":13,"d":14},{"n":"Benito García","g":3,"r":12,"d":13},{"n":"Amber","g":9,"r":10,"d":12},{"n":"Roberto Perez España","g":0,"r":12,"d":12},{"n":"William","g":7,"r":5,"d":9},{"n":"Jake","g":0,"r":9,"d":9},{"n":"Linda Campos-Allen","g":0,"r":3,"d":3},{"n":"Ximena R","g":0,"r":2,"d":2}],"links":[{"s":"Rafa Mendoza","t":"Sid","m":1},{"s":"Adriana","t":"Lucy","m":1},{"s":"Rafa Mendoza","t":"Ramesh","m":0},{"s":"Jose M.","t":"Rafa","m":0},{"s":"Celeste","t":"Jose M.","m":1},{"s":"Rafa","t":"Ramesh","m":0},{"s":"Ramesh","t":"maria jose","m":1},{"s":"Sid","t":"maria jose","m":1},{"s":"Rafa","t":"Sid","m":0},{"s":"Benito García","t":"Ramesh","m":0},{"s":"Benito García","t":"Sid","m":0},{"s":"Lucy","t":"Ramesh","m":1},{"s":"Lucy","t":"Sid","m":0},{"s":"Celeste","t":"Ramesh","m":1},{"s":"Adriana","t":"Ramesh","m":0},{"s":"Jose M.","t":"Ramesh","m":1},{"s":"Lucia","t":"Sid","m":1},{"s":"Adriana","t":"Ximena R","m":0},{"s":"Jose M.","t":"maria jose","m":1},{"s":"Daniel R","t":"maria jose","m":0},{"s":"Celeste","t":"Patricia Vaz","m":1},{"s":"Patricia Vaz","t":"maria jose","m":1},{"s":"Jose M.","t":"KTV","m":1},{"s":"Linda Campos-Allen","t":"Sid","m":0},{"s":"Adriana","t":"Lucia","m":1},{"s":"Karina","t":"Lorena Vargas","m":0},{"s":"Karina","t":"Kipper","m":0},{"s":"Karina","t":"William","m":1},{"s":"Celeste","t":"maria jose","m":1},{"s":"KTV","t":"Patricia Vaz","m":1},{"s":"Linda Campos-Allen","t":"Ramesh","m":0},{"s":"Amber","t":"Lucia","m":1},{"s":"Benito García","t":"Danisha","m":0},{"s":"Daniel R","t":"Danisha","m":1},{"s":"Alex","t":"Karina","m":0},{"s":"Lorena Vargas","t":"Roberto Perez España","m":0},{"s":"Ramesh","t":"Sid","m":1},{"s":"Alex","t":"William","m":0},{"s":"Jose M.","t":"Lucy","m":1},{"s":"Lorena Vargas","t":"William","m":1},{"s":"Adriana","t":"Helen","m":0},{"s":"Helen","t":"Lucy","m":0},{"s":"Alex","t":"Lorena Vargas","m":1},{"s":"Benito García","t":"Daniel R","m":0},{"s":"Helen","t":"Jose M.","m":0},{"s":"Celeste","t":"Helen","m":0},{"s":"Helen","t":"maria jose","m":0},{"s":"Helen","t":"Patricia Vaz","m":0},{"s":"Adriana","t":"KTV","m":0},{"s":"Kipper","t":"Lorena Vargas","m":1},{"s":"Alex","t":"Kipper","m":1},{"s":"Kipper","t":"William","m":1},{"s":"KTV","t":"maria jose","m":1},{"s":"Adriana","t":"Jose M.","m":1},{"s":"Helen","t":"Lucia","m":0},{"s":"Dax","t":"Rafa Mendoza","m":0},{"s":"Rafa","t":"Roberto Perez España","m":0},{"s":"Dax","t":"Lorena Vargas","m":0},{"s":"Celeste","t":"KTV","m":1},{"s":"Karina","t":"Rafa","m":0},{"s":"Adriana","t":"maria jose","m":1},{"s":"Lucy","t":"maria jose","m":1},{"s":"Helen","t":"Ramesh","m":0},{"s":"Helen","t":"Lorena Vargas","m":0},{"s":"Adriana","t":"Rafa","m":0},{"s":"Patricia Vaz","t":"Rafa Mendoza","m":1},{"s":"Amber","t":"Dax","m":0},{"s":"Lorena Vargas","t":"Patricia Vaz","m":1},{"s":"Roberto Perez España","t":"William","m":0},{"s":"Adriana","t":"Celeste","m":1},{"s":"Danisha","t":"maria jose","m":1},{"s":"Lorena Vargas","t":"Ramesh","m":1},{"s":"Patricia Vaz","t":"Ramesh","m":1},{"s":"Helen","t":"Rafa Mendoza","m":0},{"s":"Celeste","t":"Lucy","m":0},{"s":"Alex","t":"Ramesh","m":1},{"s":"Daniel R","t":"Lucy","m":1},{"s":"Dax","t":"Helen","m":0},{"s":"Lorena Vargas","t":"maria jose","m":1},{"s":"Karina","t":"Ramesh","m":0},{"s":"Jose M.","t":"Lucia","m":1},{"s":"Daniel R","t":"Ramesh","m":1},{"s":"Amber","t":"Helen","m":0},{"s":"Benito García","t":"Lucia","m":1},{"s":"Amber","t":"Ramesh","m":0},{"s":"Amber","t":"Lorena Vargas","m":0},{"s":"Kipper","t":"Ramesh","m":1},{"s":"Kipper","t":"Roberto Perez España","m":0},{"s":"Lucy","t":"Rafa","m":0},{"s":"Adriana","t":"Danisha","m":1},{"s":"Ramesh","t":"Roberto Perez España","m":0},{"s":"Danisha","t":"KTV","m":1},{"s":"Amber","t":"maria jose","m":1},{"s":"Danisha","t":"Ramesh","m":1},{"s":"Kipper","t":"Lucy","m":1},{"s":"Benito García","t":"Jose M.","m":1},{"s":"Ramesh","t":"William","m":0},{"s":"Celeste","t":"Lorena Vargas","m":1},{"s":"Lucia","t":"Patricia Vaz","m":1},{"s":"Daniel R","t":"Lucia","m":1},{"s":"KTV","t":"Ramesh","m":1},{"s":"Lorena Vargas","t":"Rafa","m":0},{"s":"Dax","t":"Rafa","m":0},{"s":"Karina","t":"Lucy","m":1},{"s":"Amber","t":"Rafa Mendoza","m":0},{"s":"Lorena Vargas","t":"Rafa Mendoza","m":0},{"s":"Lucia","t":"maria jose","m":1},{"s":"Celeste","t":"Rafa","m":0},{"s":"Jose M.","t":"Patricia Vaz","m":0},{"s":"Daniel R","t":"Jose M.","m":1},{"s":"Adriana","t":"Benito García","m":0},{"s":"Kipper","t":"Patricia Vaz","m":1},{"s":"Danisha","t":"Karina","m":1},{"s":"William","t":"maria jose","m":0},{"s":"Jose M.","t":"William","m":0},{"s":"KTV","t":"Lucia","m":1},{"s":"Jose M.","t":"Lorena Vargas","m":0},{"s":"Adriana","t":"William","m":0},{"s":"Adriana","t":"Dax","m":0},{"s":"Jose M.","t":"Kipper","m":1},{"s":"Lucy","t":"Rafa Mendoza","m":1},{"s":"Alex","t":"Patricia Vaz","m":1},{"s":"Celeste","t":"Karina","m":1},{"s":"Amber","t":"Roberto Perez España","m":0},{"s":"Alex","t":"Roberto Perez España","m":0},{"s":"Linda Campos-Allen","t":"maria jose","m":0},{"s":"Jose M.","t":"Rafa Mendoza","m":1},{"s":"Lucia","t":"Ramesh","m":1},{"s":"Danisha","t":"Kipper","m":0},{"s":"Dax","t":"Lucy","m":1},{"s":"Daniel R","t":"KTV","m":1},{"s":"Danisha","t":"Jose M.","m":1},{"s":"Kipper","t":"Rafa Mendoza","m":0},{"s":"Daniel R","t":"Dax","m":1},{"s":"Alex","t":"Sid","m":1},{"s":"Danisha","t":"Lucia","m":1},{"s":"Adriana","t":"Alex","m":1},{"s":"Daniel R","t":"Sid","m":0},{"s":"Kipper","t":"maria jose","m":1},{"s":"Dax","t":"KTV","m":1},{"s":"Dax","t":"Sid","m":1},{"s":"Adriana","t":"Rafa Mendoza","m":0},{"s":"Karina","t":"Sid","m":0},{"s":"Karina","t":"Patricia Vaz","m":0},{"s":"Roberto Perez España","t":"Sid","m":0},{"s":"Alex","t":"Helen","m":0},{"s":"Danisha","t":"Lucy","m":1},{"s":"Rafa","t":"maria jose","m":0},{"s":"Adriana","t":"Lorena Vargas","m":1},{"s":"Kipper","t":"Sid","m":1},{"s":"Benito García","t":"Patricia Vaz","m":0},{"s":"Celeste","t":"Dax","m":0},{"s":"KTV","t":"Sid","m":0},{"s":"Danisha","t":"Lorena Vargas","m":1},{"s":"Daniel R","t":"Lorena Vargas","m":1},{"s":"Amber","t":"Sid","m":0},{"s":"Benito García","t":"maria jose","m":0},{"s":"Dax","t":"maria jose","m":1},{"s":"Adriana","t":"Kipper","m":1},{"s":"Danisha","t":"Sid","m":0},{"s":"KTV","t":"Rafa Mendoza","m":1},{"s":"Benito García","t":"Dax","m":0},{"s":"Helen","t":"Sid","m":0},{"s":"Alex","t":"Celeste","m":1},{"s":"Lucia","t":"Lucy","m":1},{"s":"Jose M.","t":"Sid","m":1},{"s":"Dax","t":"Ramesh","m":1},{"s":"KTV","t":"Kipper","m":1},{"s":"Dax","t":"Jose M.","m":0},{"s":"Alex","t":"Rafa Mendoza","m":1},{"s":"Patricia Vaz","t":"Sid","m":1},{"s":"Adriana","t":"Daniel R","m":1},{"s":"Jake","t":"KTV","m":0},{"s":"Celeste","t":"Rafa Mendoza","m":1},{"s":"Alex","t":"Dax","m":0},{"s":"Lucy","t":"Patricia Vaz","m":1},{"s":"Adriana","t":"Jake","m":0},{"s":"KTV","t":"Lorena Vargas","m":1},{"s":"Lucia","t":"Rafa Mendoza","m":1},{"s":"Lorena Vargas","t":"Sid","m":1},{"s":"Alex","t":"Danisha","m":1},{"s":"Daniel R","t":"Helen","m":0},{"s":"Dax","t":"Kipper","m":1},{"s":"Alex","t":"Lucy","m":1},{"s":"Jake","t":"Sid","m":0},{"s":"Jake","t":"Patricia Vaz","m":0},{"s":"Karina","t":"maria jose","m":1},{"s":"Kipper","t":"Rafa","m":0},{"s":"Daniel R","t":"Jake","m":0},{"s":"Celeste","t":"Sid","m":1},{"s":"Lorena Vargas","t":"Lucy","m":0},{"s":"Danisha","t":"Patricia Vaz","m":1},{"s":"Karina","t":"Rafa Mendoza","m":1},{"s":"Lucia","t":"Rafa","m":0},{"s":"Benito García","t":"Celeste","m":0},{"s":"Danisha","t":"Dax","m":1},{"s":"Alex","t":"Rafa","m":0},{"s":"Benito García","t":"Lucy","m":0},{"s":"Adriana","t":"Patricia Vaz","m":1},{"s":"Daniel R","t":"Kipper","m":1},{"s":"Alex","t":"Lucia","m":0},{"s":"Jake","t":"Rafa Mendoza","m":0},{"s":"Adriana","t":"Karina","m":0},{"s":"Celeste","t":"Daniel R","m":1},{"s":"Adriana","t":"Sid","m":0},{"s":"Celeste","t":"Kipper","m":1},{"s":"Benito García","t":"Rafa Mendoza","m":0},{"s":"Jake","t":"maria jose","m":0},{"s":"Jake","t":"Lucy","m":0},{"s":"Danisha","t":"Rafa Mendoza","m":1},{"s":"Jake","t":"Lorena Vargas","m":0},{"s":"Dax","t":"Karina","m":1},{"s":"Jose M.","t":"Ximena R","m":0},{"s":"Celeste","t":"Danisha","m":1},{"s":"Alex","t":"maria jose","m":1},{"s":"Daniel R","t":"Rafa Mendoza","m":1},{"s":"KTV","t":"Roberto Perez España","m":0},{"s":"Amber","t":"KTV","m":1},{"s":"Dax","t":"Roberto Perez España","m":0},{"s":"Alex","t":"Jose M.","m":0},{"s":"Rafa Mendoza","t":"maria jose","m":0},{"s":"Amber","t":"Celeste","m":1},{"s":"Adriana","t":"Roberto Perez España","m":0},{"s":"Roberto Perez España","t":"maria jose","m":0},{"s":"Amber","t":"Danisha","m":1},{"s":"Daniel R","t":"Karina","m":0}],"meta":{"players":27,"marks":356,"pairs":226,"mutual":117,"density":64.4}};
+
+/* ---------------------------------------------------------------- copy-out */
+const m = DATA.meta;
+document.getElementById('stats').innerHTML = [
+  [m.players,  'people on the map'],
+  [m.pairs,    'distinct pairs who met'],
+  [m.mutual,   'confirmed from both sides'],
+  [m.marks,    'squares claimed'],
+  ['35',       'minutes, start to finish'],
+  ['55/55',    'prompts used at least once']
+].map(([n, l]) => `<div class="stat"><span class="stat__n">${n}</span><span class="stat__l">${l}</span></div>`).join('');
+
+const leaders = DATA.nodes.slice(0, 8);
+const maxD = leaders[0].d;
+document.getElementById('rank').innerHTML = leaders.map((p, i) => `
+  <li>
+    <span class="rank__pos">${String(i + 1).padStart(2, '0')}</span>
+    <span class="rank__name">
+      <span class="rank__label">${p.n}</span>
+      <span class="rank__bar" style="width:${(p.d / maxD) * 100}px"></span>
+    </span>
+    <span class="rank__val">${p.d}</span>
+  </li>`).join('');
+
+const MOST = [
+  [12, 'Has a Salesforce sticker on their laptop'],
+  [11, 'Has earned a Trailhead Superbadge'],
+  [10, 'Has worked with Salesforce and another AI tool'],
+  [10, 'Is attending Dreamforce for the first time'],
+  [10, "Has said 'It works in sandbox!' this year"]
+];
+const LEAST = [
+  [1, 'Is wearing Salesforce or Trailblazer swag'],
+  [2, 'Can explain the Enterprise AI Harness'],
+  [3, 'Works with Commerce Cloud'],
+  [3, 'Is a Salesforce MVP'],
+  [3, 'Has made a real friend through the Salesforce community']
+];
+const row = ([n, t]) => `<li><b>${n}×</b><span>${t}</span></li>`;
+document.getElementById('most').innerHTML  = MOST.map(row).join('');
+document.getElementById('least').innerHTML = LEAST.map(row).join('');
+
+/* ---------------------------------------------------------------- graph */
+try {
+const css      = getComputedStyle(document.documentElement);
+const tok      = (k) => css.getPropertyValue(k).trim();
+const RAMP     = [tok('--warm-1'), tok('--warm-2'), tok('--warm-3'), tok('--warm-4')];
+const canvas   = document.getElementById('graph');
+const ctx      = canvas.getContext('2d');
+const readout  = document.getElementById('readout');
+const reduce   = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const byName = new Map(DATA.nodes.map((n) => [n.n, n]));
+const nodes  = DATA.nodes.map((n) => ({ ...n, x: 0, y: 0, vx: 0, vy: 0 }));
+const index  = new Map(nodes.map((n, i) => [n.n, i]));
+const links  = DATA.links
+  .filter((l) => index.has(l.s) && index.has(l.t))
+  .map((l) => ({ a: index.get(l.s), b: index.get(l.t), m: l.m }));
+
+const degMax = Math.max(...nodes.map((n) => n.d));
+const degMin = Math.min(...nodes.map((n) => n.d));
+const radius = (n) => 5 + 13 * Math.sqrt((n.d - degMin) / (degMax - degMin || 1));
+const fill   = (n) => RAMP[Math.min(RAMP.length - 1,
+                 Math.floor(((n.d - degMin) / (degMax - degMin || 1)) * RAMP.length))];
+
+let W = 0, H = 0, hover = -1;
+
+function size() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const r = canvas.getBoundingClientRect();
+  W = r.width; H = r.height;
+  canvas.width = W * dpr; canvas.height = H * dpr;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+function seed() {
+  // Ring start converges faster and more evenly than random placement.
+  nodes.forEach((n, i) => {
+    const a = (i / nodes.length) * Math.PI * 2;
+    n.x = W / 2 + Math.cos(a) * Math.min(W, H) * 0.3;
+    n.y = H / 2 + Math.sin(a) * Math.min(W, H) * 0.3;
+    n.vx = n.vy = 0;
+  });
+}
+
+function step() {
+  // Repulsion — 27 nodes, so the naive all-pairs pass is free.
+  for (let i = 0; i < nodes.length; i++) {
+    for (let j = i + 1; j < nodes.length; j++) {
+      const a = nodes[i], b = nodes[j];
+      let dx = b.x - a.x, dy = b.y - a.y;
+      let d2 = dx * dx + dy * dy || 0.01;
+      const min = (radius(a) + radius(b) + 14) ** 2;
+      const f = (d2 < min ? 2600 : 1400) / d2;
+      const d = Math.sqrt(d2);
+      const ux = dx / d, uy = dy / d;
+      a.vx -= ux * f; a.vy -= uy * f;
+      b.vx += ux * f; b.vy += uy * f;
+    }
+  }
+  // Springs — people who met are pulled together.
+  for (const l of links) {
+    const a = nodes[l.a], b = nodes[l.b];
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const d = Math.hypot(dx, dy) || 0.01;
+    const f = (d - 108) * 0.012;
+    const ux = dx / d, uy = dy / d;
+    a.vx += ux * f; a.vy += uy * f;
+    b.vx -= ux * f; b.vy -= uy * f;
+  }
+  for (const n of nodes) {
+    n.vx += (W / 2 - n.x) * 0.0016;
+    n.vy += (H / 2 - n.y) * 0.0016;
+    n.vx *= 0.86; n.vy *= 0.86;
+    n.x += n.vx; n.y += n.vy;
+    const pad = radius(n) + 10;
+    n.x = Math.max(pad, Math.min(W - pad, n.x));
+    n.y = Math.max(pad, Math.min(H - pad, n.y));
+  }
+}
+
+function draw() {
+  ctx.clearRect(0, 0, W, H);
+  const lit = hover >= 0 ? new Set([hover]) : null;
+  if (lit) links.forEach((l) => {
+    if (l.a === hover) lit.add(l.b);
+    if (l.b === hover) lit.add(l.a);
+  });
+
+  for (const l of links) {
+    const a = nodes[l.a], b = nodes[l.b];
+    const on = !lit || l.a === hover || l.b === hover;
+    ctx.strokeStyle = on ? (lit ? tok('--edge-hi') : tok('--edge')) : tok('--surface');
+    ctx.globalAlpha = on ? (l.m ? 0.85 : 0.42) : 0.5;
+    ctx.lineWidth = on && lit ? 1.6 : l.m ? 1.1 : 0.7;
+    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+
+  for (let i = 0; i < nodes.length; i++) {
+    const n = nodes[i];
+    const on = !lit || lit.has(i);
+    const r = radius(n);
+    ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+    ctx.fillStyle = on ? fill(n) : tok('--faint');
+    ctx.globalAlpha = on ? 1 : 0.28;
+    ctx.fill();
+    // 2px surface ring keeps overlapping marks separable.
+    ctx.lineWidth = 2; ctx.strokeStyle = tok('--ground'); ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+
+  // Label only the few biggest, plus whatever is hovered — never every point.
+  ctx.font = '500 11px ' + tok('--mono');
+  ctx.textAlign = 'center';
+  nodes.forEach((n, i) => {
+    const big = n.d >= degMax - 3;
+    if (!big && i !== hover) return;
+    if (lit && !lit.has(i)) return;
+    ctx.fillStyle = i === hover ? tok('--ink') : tok('--muted');
+    ctx.fillText(n.n, n.x, n.y - radius(n) - 7);
+  });
+}
+
+let cooling = reduce ? 0 : 320;
+function frame() {
+  if (cooling > 0) { step(); cooling--; draw(); requestAnimationFrame(frame); }
+  else draw();
+}
+
+function settle(iterations) { for (let i = 0; i < iterations; i++) step(); }
+
+function start() {
+  size(); seed();
+  if (reduce) { settle(320); draw(); }
+  else { cooling = 320; requestAnimationFrame(frame); }
+}
+
+canvas.addEventListener('pointermove', (e) => {
+  const r = canvas.getBoundingClientRect();
+  const x = e.clientX - r.left, y = e.clientY - r.top;
+  let found = -1, best = Infinity;
+  nodes.forEach((n, i) => {
+    const d = Math.hypot(n.x - x, n.y - y);
+    // Hit target deliberately larger than the mark.
+    if (d < radius(n) + 12 && d < best) { best = d; found = i; }
+  });
+  if (found === hover) return;
+  hover = found;
+  if (hover >= 0) {
+    const n = nodes[hover];
+    readout.innerHTML =
+      `<p class="readout__name">${n.n}</p>` +
+      `<p class="readout__detail">met ${n.d} people · claimed ${n.g} squares · named by ${n.r}</p>`;
+  } else {
+    readout.innerHTML = '<p class="readout__hint">Hover anyone to see who they met.</p>';
+  }
+  if (cooling <= 0) draw();
+});
+
+canvas.addEventListener('pointerleave', () => {
+  hover = -1;
+  readout.innerHTML = '<p class="readout__hint">Hover anyone to see who they met.</p>';
+  if (cooling <= 0) draw();
+});
+
+addEventListener('resize', () => { size(); settle(90); draw(); });
+start();
+} catch (err) {
+  const r = document.getElementById('readout');
+  if (r) r.innerHTML = '<p class="readout__detail">graph: ' +
+    String(err && err.message).replace(/</g, '&lt;') + '</p>';
+}
+</script>

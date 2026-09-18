@@ -20,3 +20,10 @@ destructive/destructiveChanges.xml
 # Supply your own via Bingo_Event__mdt.Logo_Url__c (a static resource path such as
 # /sfsites/c/resource/YourLogo avoids the Experience Cloud CSP entirely).
 force-app/main/default/staticresources/SalesforceLogo.png
+
+# Raw per-claim log: who named whom, when, for which prompt — 356 rows of
+# attendee behaviour. Players consented to a display name on a leaderboard, not
+# to a permanent public dataset of their connections. The derived network.json
+# (names + edges, no timestamps) is published instead, and matches what the
+# shared image already shows. Regenerate locally with analysis/shape.js.
+analysis/graph.json

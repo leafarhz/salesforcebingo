@@ -1,0 +1,214 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  :root {
+    --ground:  #0e1621;
+    --panel:   #16212e;
+    --ink:     #edf1f5;
+    --muted:   #8697a9;
+    --faint:   #57697f;
+    --edge:    #35566f;
+    --warm-1:  #ffd2b4;
+    --warm-2:  #ffa87c;
+    --warm-3:  #ff8a5b;
+    --warm-4:  #e0603a;
+    --serif: ui-serif, Georgia, 'Iowan Old Style', serif;
+    --mono:  ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --sans:  system-ui, -apple-system, 'Segoe UI', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1200px; height: 1200px; overflow: hidden; }
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--sans);
+    display: flex;
+    flex-direction: column;
+    padding: 56px 56px 44px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  header { display: flex; justify-content: space-between; align-items: flex-start; }
+  .eyebrow {
+    font-family: var(--mono); font-size: 15px; letter-spacing: 0.16em;
+    color: var(--muted); text-transform: uppercase;
+  }
+  h1 {
+    font-family: var(--serif); font-weight: 400;
+    font-size: 72px; line-height: 0.95; letter-spacing: -0.025em;
+    margin-top: 14px;
+  }
+  .sub { margin-top: 14px; color: var(--muted); font-size: 20px; line-height: 1.45; max-width: 520px; }
+
+  .badge {
+    text-align: right; font-family: var(--mono);
+    color: var(--warm-3); font-size: 15px; letter-spacing: 0.1em; line-height: 1.7;
+  }
+  .badge b { display: block; font-size: 30px; color: var(--ink); letter-spacing: -0.02em; }
+
+  #c { flex: 0 0 auto; display: block; width: 1088px; height: 744px; margin: 16px 0 0; }
+
+  .strip {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: #223044; border: 1px solid #223044; border-radius: 3px;
+    margin-top: 10px;
+  }
+  .cell { background: var(--panel); padding: 20px 22px; }
+  .cell b {
+    display: block; font-family: var(--mono); font-size: 40px;
+    letter-spacing: -0.03em; font-variant-numeric: tabular-nums; font-weight: 400;
+  }
+  .cell span { display: block; margin-top: 6px; color: var(--muted); font-size: 15px; line-height: 1.3; }
+  .cell.hl b { color: var(--warm-3); }
+
+  footer {
+    margin-top: 18px; display: flex; justify-content: space-between;
+    color: var(--faint); font-size: 14px; font-family: var(--mono); letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div>
+      <p class="eyebrow">Dreamforce 2026 · LATAM Community Meetup</p>
+      <h1>The room, mapped</h1>
+      <p class="sub">Every line is two people who actually met.<br>One bingo card each, thirty-five minutes.</p>
+    </div>
+    <div class="badge">
+      35 MINUTES<b>226</b>introductions
+    </div>
+  </header>
+
+  <canvas id="c" width="2176" height="1488"></canvas>
+
+  <div class="strip">
+    <div class="cell"><b>31</b><span>people played</span></div>
+    <div class="cell hl"><b>48%</b><span>of every possible pair actually met</span></div>
+    <div class="cell"><b>117</b><span>pairs confirmed from both sides</span></div>
+    <div class="cell"><b>55/55</b><span>prompts claimed at least once</span></div>
+  </div>
+
+  <footer>
+    <span>BUILT + RUN ON SALESFORCE</span>
+    <span>SELF-REPORTED · 356 CLAIMS · 0 RETRACTED</span>
+  </footer>
+
+<script>
+const DATA = /*__DATA__*/null;
+
+const css = getComputedStyle(document.documentElement);
+const tok = (k) => css.getPropertyValue(k).trim();
+const RAMP = [tok('--warm-1'), tok('--warm-2'), tok('--warm-3'), tok('--warm-4')];
+
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+const W = cv.width / 2, H = cv.height / 2;      // drawn in CSS px, backed at 2x
+ctx.scale(2, 2);
+
+const nodes = DATA.nodes.map((n) => ({ ...n, x: 0, y: 0, vx: 0, vy: 0 }));
+const at = new Map(nodes.map((n, i) => [n.n, i]));
+const links = DATA.links.map((l) => ({ a: at.get(l.s), b: at.get(l.t), m: l.m }));
+
+const dMax = Math.max(...nodes.map((n) => n.d));
+const dMin = Math.min(...nodes.map((n) => n.d));
+const norm = (n) => (n.d - dMin) / (dMax - dMin || 1);
+const rad  = (n) => 7 + 20 * Math.sqrt(norm(n));
+const hue  = (n) => RAMP[Math.min(RAMP.length - 1, Math.floor(norm(n) * RAMP.length))];
+
+nodes.forEach((n, i) => {
+  const a = (i / nodes.length) * Math.PI * 2;
+  n.x = W / 2 + Math.cos(a) * Math.min(W, H) * 0.40;
+  n.y = H / 2 + Math.sin(a) * Math.min(W, H) * 0.40;
+});
+
+function step() {
+  for (let i = 0; i < nodes.length; i++)
+    for (let j = i + 1; j < nodes.length; j++) {
+      const a = nodes[i], b = nodes[j];
+      const dx = b.x - a.x, dy = b.y - a.y;
+      const d2 = dx * dx + dy * dy || 0.01;
+      const near = (rad(a) + rad(b) + 30) ** 2;
+      const f = (d2 < near ? 7600 : 4200) / d2;
+      const d = Math.sqrt(d2), ux = dx / d, uy = dy / d;
+      a.vx -= ux * f; a.vy -= uy * f; b.vx += ux * f; b.vy += uy * f;
+    }
+  for (const l of links) {
+    const a = nodes[l.a], b = nodes[l.b];
+    const dx = b.x - a.x, dy = b.y - a.y;
+    const d = Math.hypot(dx, dy) || 0.01;
+    const f = (d - 205) * 0.010, ux = dx / d, uy = dy / d;
+    a.vx += ux * f; a.vy += uy * f; b.vx -= ux * f; b.vy -= uy * f;
+  }
+  for (const n of nodes) {
+    n.vx += (W / 2 - n.x) * 0.0009;
+    n.vy += (H / 2 - n.y) * 0.0009;
+    n.vx *= 0.85; n.vy *= 0.85;
+    n.x += n.vx; n.y += n.vy;
+    const p = rad(n) + 8;
+    n.x = Math.max(p, Math.min(W - p, n.x));
+    n.y = Math.max(p, Math.min(H - p, n.y));
+  }
+}
+for (let i = 0; i < 900; i++) step();
+
+// Fit the settled layout to the frame. Tuning force constants to land on a
+// well-filled composition is guesswork; measuring the result and scaling it is not.
+(() => {
+  const pad = 74;                                  // room for labels at the edges
+  const xs = nodes.map((n) => n.x), ys = nodes.map((n) => n.y);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs);
+  const y0 = Math.min(...ys), y1 = Math.max(...ys);
+  const k = Math.min((W - pad * 2) / (x1 - x0 || 1), (H - pad * 2) / (y1 - y0 || 1));
+  const ox = (W - (x1 - x0) * k) / 2 - x0 * k;
+  const oy = (H - (y1 - y0) * k) / 2 - y0 * k;
+  for (const n of nodes) { n.x = n.x * k + ox; n.y = n.y * k + oy; }
+})();
+
+// links
+for (const l of links) {
+  const a = nodes[l.a], b = nodes[l.b];
+  ctx.strokeStyle = tok('--edge');
+  ctx.globalAlpha = l.m ? 0.9 : 0.42;
+  ctx.lineWidth = l.m ? 1.7 : 1.0;
+  ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+}
+ctx.globalAlpha = 1;
+
+// nodes
+for (const n of nodes) {
+  ctx.beginPath(); ctx.arc(n.x, n.y, rad(n), 0, Math.PI * 2);
+  ctx.fillStyle = hue(n); ctx.fill();
+  ctx.lineWidth = 3; ctx.strokeStyle = tok('--ground'); ctx.stroke();
+}
+
+// Every name is labelled — people look for themselves. Four candidate positions,
+// first one that clears already-placed labels wins.
+ctx.font = '600 15px ' + tok('--mono');
+ctx.textBaseline = 'middle';
+const placed = [];
+const clear = (b) => !placed.some((p) =>
+  b.x < p.x + p.w && b.x + b.w > p.x && b.y < p.y + p.h && b.y + b.h > p.y);
+
+for (const n of [...nodes].sort((a, b) => b.d - a.d)) {
+  const tw = ctx.measureText(n.n).width, th = 17, r = rad(n);
+  const spots = [
+    { x: n.x - tw / 2,     y: n.y + r + 5 },
+    { x: n.x - tw / 2,     y: n.y - r - th - 5 },
+    { x: n.x + r + 7,      y: n.y - th / 2 },
+    { x: n.x - r - tw - 7, y: n.y - th / 2 }
+  ];
+  const spot = spots.find((s) => clear({ ...s, w: tw, h: th }));
+  if (!spot) continue;
+  placed.push({ ...spot, w: tw, h: th });
+  ctx.textAlign = 'left';
+  ctx.lineWidth = 4; ctx.strokeStyle = tok('--ground');
+  ctx.strokeText(n.n, spot.x, spot.y + th / 2);          // halo for legibility
+  ctx.fillStyle = norm(n) > 0.55 ? tok('--ink') : tok('--muted');
+  ctx.fillText(n.n, spot.x, spot.y + th / 2);
+}
+document.documentElement.dataset.ready = '1';
+</script>
+</body>
+</html>
